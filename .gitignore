@@ -1,0 +1,7 @@
+# ignore all compiler related fills
+*.o
+*.d
+*.exe
+
+# misc
+.vscode 
