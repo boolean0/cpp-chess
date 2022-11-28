@@ -12,7 +12,7 @@ git pull (you should see a new branch called main be created in your local repo)
   
 git checkout main
   
-git branch -b new-branch-name main
+git checkout -b new-branch-name main
   
 --do your stuff in the branch--
   
