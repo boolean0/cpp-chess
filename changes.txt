@@ -2,3 +2,20 @@
 // Template:
 // [Class] : aslfdkjasdlkfjasdlkfj
 
+Player: 
+    added accessor for isCheckmate(), isStalemate(), getColor()
+    !!! player now has access to the chessboard via pointer
+    added accessor for board ^^^
+
+AI:
+    made generateMove() private
+        since we now have pointer to chessboard, removed parameter board
+
+        
+Strategies!!!
+//Talk about shit we did 
+
+11-28th
+    dummy constructor for move to make life easier
+
+

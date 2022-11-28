@@ -19,7 +19,8 @@ class Move {
     // two ctors: one for regular moves and one for "special" things like castling, promotion, etc.
     // regular move ctor will set all the stuff as false
     Move(Piece* movedPiece, pair<int,int> endPos, Piece* capturedPiece = nullptr);
-    Move(Piece* movedPiece, pair<int,int> endPos, Piece* capturedPiece, bool isWhite, bool isCastleK, bool isCastleQ, bool isPromoting, char promoteTo, bool isEP);
+    Move(Piece* movedPiece, pair<int,int> endPos, Piece* capturedPiece, bool isCastleK, bool isCastleQ, bool isPromoting, char promoteTo, bool isEP);
+    Move(); //DUMMY REMOVE THIS PIECE OF SHIT LATER
     Piece * getMovedPiece(); 
     pair<int, int> getStartPos(); 
     pair<int, int> getEndPos(); 

@@ -12,7 +12,7 @@ Move::Move(Piece* movedPiece, pair<int,int> endPos, Piece* capturedPiece) : // f
     isPromoting{false},
     isEP{false}{}
 
-Move::Move(Piece* movedPiece, pair<int, int> endPos, Piece* capturedPiece, bool isWhite, bool isCastleK, bool isCastleQ, bool isPromoting, char promoteTo, bool isEP) :
+Move::Move(Piece* movedPiece, pair<int, int> endPos, Piece* capturedPiece, bool isCastleK, bool isCastleQ, bool isPromoting, char promoteTo, bool isEP) :
     movedPiece{movedPiece},
     endPos{endPos}, 
     capturedPiece{capturedPiece},
@@ -21,6 +21,16 @@ Move::Move(Piece* movedPiece, pair<int, int> endPos, Piece* capturedPiece, bool 
     isPromoting{isPromoting},
     isEP{isEP} {}
 
+
+//REMOVE ME IM USELESS
+Move::Move() : 
+    movedPiece{nullptr}, 
+    endPos{make_pair(0,0)}, 
+    capturedPiece{nullptr},
+    isCastleK{false},
+    isCastleQ{false},
+    isPromoting{false},
+    isEP{false}{}
 
 Piece* Move::getMovedPiece(){
     return movedPiece;
