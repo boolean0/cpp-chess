@@ -23,4 +23,8 @@ vector<Move> Piece::generateMoves() {
     return {};
 }
 
+pair<int, int> Piece::getPosition(){
+    return position;
+}
+
 Piece::~Piece() {}

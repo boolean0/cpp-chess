@@ -1,10 +1,10 @@
 #ifndef PIECE_H
 #define PIECE_H
-#include "Move.h"
 #include <utility>
 #include <vector>
 
 using namespace std;
+class Move;
 
 class Piece {
     protected:
@@ -18,6 +18,7 @@ class Piece {
         bool isWhite();
         int getPoints();
         char getPieceSymbol();
+        pair<int, int> getPosition();
         virtual ~Piece();
 };
 
