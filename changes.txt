@@ -30,3 +30,4 @@ Strategies!!!
         move doMove function from player into chessboard
     Game: 
         added isSetup, isRunning
+        added addPiece helper function for setup mode

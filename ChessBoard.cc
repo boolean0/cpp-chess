@@ -14,6 +14,14 @@ void ChessBoard::init() { // init board to all blank
     }
 }
 
+ChessBoard::~ChessBoard() {
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            delete board[i][j];
+        }
+    }
+}
+
 bool ChessBoard::isPathClear(Move move) {
     int rowDiff = move.getEndPos().first - move.getMovedPiece()->getPosition().first;
     int colDiff = move.getEndPos().second - move.getMovedPiece()->getPosition().second;
@@ -87,9 +95,6 @@ bool ChessBoard::isInCheck(bool white){
     return false;
 }
 
-bool ChessBoard::checkPin(Move move) { 
-    return true; 
-}
 
 void ChessBoard::doMove(Move move) { 
     // THIS ASSUMES THE MOVE IS VALID AND LEGAL
@@ -118,28 +123,3 @@ bool ChessBoard::isOccupied(pair<int,int> square) {
 bool ChessBoard::checkMoveLegal(Move move) {
     return true;
 }
-
-void ChessBoard::printCLI(){
-    for(int i = 7; i >= 0; --i){ //starts from a8 (0,0)
-        for(int j = 0; j < 8; j++){
-            if(isOccupied(make_pair(i, j))){
-                Piece* piece = getPiece(make_pair(i, j));
-                if(piece->isWhite()){
-                    cout << piece->getPieceSymbol();
-                } else {
-                    char lower = tolower(piece->getPieceSymbol());
-                    cout << lower;
-                }
-            } else {
-                //check for white or black square
-                if((i+j)%2 == 0){
-                    cout << ' ';
-                } else{
-                    cout << '_';
-                }
-            }
-        }
-        cout << endl;
-    }
-}
-
