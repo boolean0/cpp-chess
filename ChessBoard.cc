@@ -2,6 +2,7 @@
 #include "Piece.h"
 #include <iostream>
 #include <utility>
+#include <vector>
 
 using namespace std;
 
@@ -55,6 +56,35 @@ bool ChessBoard::isPathClear(Move move) {
         }
     }
     return true;
+}
+
+bool ChessBoard::isInCheck(bool white){
+    pair<int, int> kingPos;
+    //loop through every piece to find right colored-king
+    for(int i = 0; i < 8; i++){
+        for(int j = 0; j < 8; j++){
+            if(isOccupied(make_pair(i, j))){
+                if((getPiece(make_pair(i, j))->getPieceSymbol() == 'K') && (getPiece(make_pair(i, j))->isWhite() && white)){
+                    kingPos = make_pair(i, j);
+                }
+            }
+        }
+    } // requires board to have king of each color. If no king, then kingPos defaults to 0 0
+    //loop through each piece and check moves to see if kingPos is one of them
+    for(int i = 0; i < 8; i++){
+        for(int j = 0; j < 8; j++){
+            if(isOccupied(make_pair(i, j))){
+                vector<Move> ml = getPiece(make_pair(i, j))->generateMoves();
+                for(Move m : ml){
+                    if(isPathClear(m) && m.getEndPos() == kingPos){
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+
+    return false;
 }
 
 bool ChessBoard::simulateMove(Move move) { return true; }

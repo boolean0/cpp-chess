@@ -70,6 +70,12 @@ int main() {
                 }
             }
         }
+        else if(command=="check"){
+            cin >> color;
+            if(board.isInCheck(color)){
+                cout << "yes" << endl;
+            } else cout << "no" << endl;
+        }
         else if (command == "print") {
             board.printCLI();
         }

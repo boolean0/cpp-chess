@@ -11,6 +11,7 @@ class ChessBoard{
     public: 
         void init(); 
         bool isPathClear(Move move);
+        bool isInCheck(bool white);
         bool simulateMove(Move move); 
         void setup(); 
         Piece* getPiece(pair<int, int> square);
