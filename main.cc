@@ -63,9 +63,11 @@ int main() {
             Piece *p = board.getPiece(make_pair(x,y));
             vector<Move> ml = p->generateMoves();
             for(Move i : ml){
-                int x = i.getEndPos().first;
-                int y = i.getEndPos().second;
-                cout << x << "," << y << endl;
+                if(board.isPathClear(i)){
+                    int x = i.getEndPos().first;
+                    int y = i.getEndPos().second;
+                    cout << x << "," << y << endl;
+                }
             }
         }
         else if (command == "print") {
