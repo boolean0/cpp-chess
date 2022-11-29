@@ -14,7 +14,7 @@ class Player {
 
     public:
         Player(bool color, bool inCheck, bool hasCastled, bool isComputer, ChessBoard *board);
-        ~Player();
+        virtual ~Player();
         void setInCheck(bool inCheck);
         void setHasCastled(bool hasCastled);
         ChessBoard *getBoard();

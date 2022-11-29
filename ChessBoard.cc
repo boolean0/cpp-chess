@@ -89,6 +89,13 @@ bool ChessBoard::isInCheck(bool white){
 
 bool ChessBoard::simulateMove(Move move) { return true; }
 
+void ChessBoard::doMove(Move move) { 
+    // THIS ASSUMES THE MOVE IS VALID AND LEGAL
+    // ONLY CALL AFTER ALL CHECKS ON MOVES HAVE BEEN DONE!
+    setPiece(move.getEndPos(), move.getMovedPiece());
+    setPiece(move.getStartPos(), nullptr);
+}
+
 Piece* ChessBoard::getPiece(pair<int, int> square) {
     return board[square.first][square.second];
 }
