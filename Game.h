@@ -3,6 +3,7 @@
 
 #include "Player.h"
 #include "ChessBoard.h"
+#include "Observer.h"
 
 class Game {
     private:
@@ -11,10 +12,14 @@ class Game {
         int pbScore;
         bool turn;
         ChessBoard *board;
+        Observer *textView;
+        Observer *graphicsView;
         bool isRunning;
         bool isSetup;
         void printScoreBoard(); 
         void reset();
+
+        void addPiece(char piece, pair<int,int> sqr);
     public:
         Game();
         ~Game(); 

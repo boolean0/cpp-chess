@@ -1,18 +1,20 @@
 #ifndef _CHESSBOARD_H_
 #define _CHESSBOARD_H_
+#include <utility>
+#include "Subject.h"
 #include "Piece.h"
 #include "Move.h"
-#include <utility>
 
-class ChessBoard{
+
+class ChessBoard: public Subject {
     private:
         Piece* board[8][8];
     
     public: 
+        ~ChessBoard();
         void init(); 
         bool isPathClear(Move move);
         bool isInCheck(bool white);
-        bool checkPin(Move move); 
         void setup(); 
         Piece* getPiece(pair<int, int> square);
         void setPiece(pair<int, int> square, Piece* piece); 

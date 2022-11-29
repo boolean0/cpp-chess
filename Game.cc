@@ -16,6 +16,8 @@
 #include "Knight.h"
 #include "Pawn.h"
 #include "Bishop.h"
+#include "TextObserver.h"
+#include "GraphicsObserver.h"
 
 using namespace std;
 
@@ -23,6 +25,8 @@ Game::Game(): pwScore{0}, pbScore{0}, turn{1}, isRunning{false}, isSetup{false} 
     players[0] = nullptr;
     players[1] = nullptr;
     board = new ChessBoard();   
+    textView = new TextObserver{board}; 
+    graphicsView = new GraphicsObserver{board};
 }
 
 Game::~Game() {
@@ -41,10 +45,14 @@ void Game::reset() {
     delete board;
     delete players[0];
     delete players[1];
+    delete textView;
+    delete graphicsView;
 
     isRunning = false;
     isSetup = false;
     board = new ChessBoard();
+    textView = new TextObserver{board}; 
+    graphicsView = new GraphicsObserver{board};
     players[0] = nullptr;
     players[1] = nullptr; // white is 1, black is 0
 }
@@ -71,6 +79,77 @@ void assignPlayers(string player, int idx, Player** players, ChessBoard * board)
             }
 }
 
+void Game::addPiece(char piece, pair<int,int> sqr) {
+     switch (piece) {
+        case 'K': {
+            King * k = new King{1, sqr};
+            board->setPiece(sqr, k);
+            break;
+        }
+        case 'Q': {
+            Queen * q = new Queen{1, sqr};
+            board->setPiece(sqr, q);
+            break;
+        }
+            
+        case 'R': {
+            Rook * r  = new Rook{1, sqr};
+            board->setPiece(sqr, r);
+            break;
+        }
+        case 'B': {
+            Bishop * b = new Bishop{1, sqr};    
+            board->setPiece(sqr, b);
+            break;
+        }
+        case 'N': {
+            Knight * k = new Knight{1, sqr};
+            board->setPiece(sqr, k);
+            break;
+        } 
+        case 'P': {
+            Pawn * p = new Pawn{1, sqr};
+            board->setPiece(sqr, p);
+            break;
+        }
+        case 'k': {
+            King * k = new King{0, sqr};
+            board->setPiece(sqr, k);
+            break;
+        }
+        case 'q': {
+            Queen * q = new Queen{0, sqr};
+            board->setPiece(sqr, q);
+            break;
+        }
+            
+        case 'r': {
+            Rook * r  = new Rook{0, sqr};
+            board->setPiece(sqr, r);
+            break;
+        }
+        case 'b': {
+            Bishop * b = new Bishop{0, sqr};    
+            board->setPiece(sqr, b);
+            break;
+        }
+        case 'n': {
+            Knight * k = new Knight{0, sqr};
+            board->setPiece(sqr, k);
+            break;
+        } 
+        case 'p': {
+            Pawn * p = new Pawn{0, sqr};
+            board->setPiece(sqr, p);
+            break;
+        }
+        default: {
+            cerr << "invalid piece" << endl;
+            break;
+        }
+    }
+}
+
 void Game::startGame() {
     bool isRunning = false;
     bool isSetup = false; 
@@ -82,7 +161,7 @@ void Game::startGame() {
         // make sure we prevent people from trying to move before starting a game
         if (input == "print") {
             //delete later, for testing
-            board->printCLI();
+            board->notifyObservers();
         }
         
         if (input == "game") {
@@ -102,7 +181,7 @@ void Game::startGame() {
                 isSetup = true;
             }
                 
-
+            // TODO: put into rows and cols instead of x,y
             string s;
             while (cin >> s) {                
                 if (s == "+") {
@@ -119,47 +198,9 @@ void Game::startGame() {
                     }
 
                     pair<int,int> sqr = make_pair(x, y);
-                    
-                    switch (piece) {
-                        case 'K': {
-                            King * k = new King{turn, sqr};
-                            board->setPiece(sqr, k);
-                            break;
-                        }
-                        case 'Q': {
-                            Queen * q = new Queen{turn, sqr};
-                            board->setPiece(sqr, q);
-                            break;
-                        }
-                            
-                        case 'R': {
-                            Rook * r  = new Rook{turn, sqr};
-                            board->setPiece(sqr, r);
-                            break;
-                        }
-                        case 'B': {
-                            Bishop * b = new Bishop{turn, sqr};    
-                            board->setPiece(sqr, b);
-                            break;
-                        }
-                        case 'N': {
-                            Knight * k = new Knight{turn, sqr};
-                            board->setPiece(sqr, k);
-                            break;
-                        } 
-                        case 'P': {
-                            Pawn * p = new Pawn{turn, sqr};
-                            board->setPiece(sqr, p);
-                            break;
-                        }
-                        default: {
-                            cerr << "invalid piece" << endl;
-                            break;
-                        }
 
-                        
-                 
-                    }
+                    //TODO ? : add try catch
+                    addPiece(piece, sqr);
                 }
                 else if (s == "-") {
                     string pos; 
