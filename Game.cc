@@ -189,15 +189,15 @@ void Game::startGame() {
                     string pos;
 
                     cin >> piece >> pos; 
-                    int y = pos[0] - 'a';
-                    int x = pos[1] - '1';
-                    cout << "x: " << x << " y: " << y << endl;
-                    if (!(x >= 0 && x < 8) || !(y >= 0 && y < 8)) {
+                    int col = pos[0] - 'a';
+                    int row = pos[1] - '1';
+                    cout << "row: " << row << " col: " << col << endl;
+                    if (!(row >= 0 && row < 8) || !(col >= 0 && col < 8)) {
                         cerr << "invalid position" << endl;
                         continue;
                     }
 
-                    pair<int,int> sqr = make_pair(x, y);
+                    pair<int,int> sqr = make_pair(row, col);
 
                     //TODO ? : add try catch
                     addPiece(piece, sqr);
@@ -206,16 +206,16 @@ void Game::startGame() {
                     string pos; 
                     cin >> pos;
                     
-                    int x = pos[0] - 'a';
-                    int y = pos[1] - '1';
+                    int row = pos[0] - 'a';
+                    int col = pos[1] - '1';
                     
-                    //handle bad input;
-                    if (!(x >= 0 && x < 8) || !(y >= 0 && y < 8)) {
+                    //handle bad inputcol
+                    if (!(row >= 0 && row < 8) || !(col >= 0 && col < 8)) {
                         cerr << "invalid position" << endl;
                         continue;
                     }
             
-                    board->setPiece(make_pair(x,y),nullptr);
+                    board->setPiece(make_pair(row,col),nullptr);
                 } 
                 else if (s == "=") {
                     string color;
@@ -232,6 +232,30 @@ void Game::startGame() {
                 }
                 else if (s == "done") {
                     break;
+                }
+                else if(s == "default") {
+                    addPiece('R', make_pair(0, 0));
+                    addPiece('N', make_pair(0, 1));
+                    addPiece('B', make_pair(0, 2));
+                    addPiece('Q', make_pair(0, 3));
+                    addPiece('K', make_pair(0, 4));
+                    addPiece('B', make_pair(0, 5));
+                    addPiece('N', make_pair(0, 6));
+                    addPiece('R', make_pair(0, 7));
+                    for(int i = 0; i < 8; i++){
+                        addPiece('P', make_pair(1, i));
+                    }
+                    addPiece('r', make_pair(7, 0));
+                    addPiece('n', make_pair(7, 1));
+                    addPiece('b', make_pair(7, 2));
+                    addPiece('q', make_pair(7, 3));
+                    addPiece('k', make_pair(7, 4));
+                    addPiece('b', make_pair(7, 5));
+                    addPiece('n', make_pair(7, 6));
+                    addPiece('r', make_pair(7, 7));
+                    for(int i = 0; i < 8; i++){
+                        addPiece('p', make_pair(6, i));
+                    }
                 }
             }
 
