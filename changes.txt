@@ -31,3 +31,8 @@ Strategies!!!
     Game: 
         added isSetup, isRunning
         added addPiece helper function for setup mode
+
+
+11-29
+    Added preprocessor configurations for Window.h so that we can compile with or without the graphic configurations
+    
