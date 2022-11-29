@@ -15,7 +15,7 @@ Move Person::parseMoveInput() {
     string start,end;
     int row1, row2, col1, col2;
     cin >> start >> end;
-
+    //getBoard()->printCLI(); 
     row1 = start[0] - 'a'; 
     col1 = start[1] - '1';
     row2 = end[0] - 'a';
@@ -26,11 +26,9 @@ Move Person::parseMoveInput() {
     if (!(row2 >= 0 && row2 < 8)) throw invalid_argument("received invalid input");
     if (!(col2 >= 0 && col2 < 8)) throw invalid_argument("received invalid input");
 
-    pair<int,int> starting = make_pair(row1,col1);
-    pair<int,int> ending = make_pair(row2,col2); 
-
+    pair<int,int> starting = make_pair(col1, row1);
+    pair<int,int> ending = make_pair(col2, row2); 
     ChessBoard *board = getBoard();
-    
     // checking if there is a piece to move
     if (!board->isOccupied(starting)) {
         throw invalid_argument("No piece to move at that square!");
