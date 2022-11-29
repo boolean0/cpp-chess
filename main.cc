@@ -60,6 +60,13 @@ int main() {
         else if(command == "get"){
             cin >> x >> y;
             if(board.isOccupied(make_pair(x,y))) cout << board.getPiece(make_pair(x,y))->getPieceSymbol();
+            Piece *p = board.getPiece(make_pair(x,y));
+            vector<Move> ml = p->generateMoves();
+            for(Move i : ml){
+                int x = i.getEndPos().first;
+                int y = i.getEndPos().second;
+                cout << x << "," << y << endl;
+            }
         }
         else if (command == "print") {
             board.printCLI();
