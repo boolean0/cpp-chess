@@ -12,7 +12,7 @@ class ChessBoard{
         void init(); 
         bool isPathClear(Move move);
         bool isInCheck(bool white);
-        bool simulateMove(Move move); 
+        bool checkPin(Move move); 
         void setup(); 
         Piece* getPiece(pair<int, int> square);
         void setPiece(pair<int, int> square, Piece* piece); 

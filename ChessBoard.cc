@@ -87,7 +87,9 @@ bool ChessBoard::isInCheck(bool white){
     return false;
 }
 
-bool ChessBoard::simulateMove(Move move) { return true; }
+bool ChessBoard::checkPin(Move move) { 
+    return true; 
+}
 
 Piece* ChessBoard::getPiece(pair<int, int> square) {
     return board[square.first][square.second];
