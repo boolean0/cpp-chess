@@ -1,4 +1,4 @@
-To create branches from main that can be merged into main with a pr: 
+# To create branches from main that can be merged into main with a pr: 
 
 (if you haven't init)
 
