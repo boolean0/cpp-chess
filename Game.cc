@@ -233,6 +233,30 @@ void Game::startGame() {
                 else if (s == "done") {
                     break;
                 }
+                else if(s == "default") {
+                    addPiece('R', make_pair(0, 0));
+                    addPiece('N', make_pair(0, 1));
+                    addPiece('B', make_pair(0, 2));
+                    addPiece('Q', make_pair(0, 3));
+                    addPiece('K', make_pair(0, 4));
+                    addPiece('B', make_pair(0, 5));
+                    addPiece('N', make_pair(0, 6));
+                    addPiece('R', make_pair(0, 7));
+                    for(int i = 0; i < 8; i++){
+                        addPiece('P', make_pair(1, i));
+                    }
+                    addPiece('r', make_pair(7, 0));
+                    addPiece('n', make_pair(7, 1));
+                    addPiece('b', make_pair(7, 2));
+                    addPiece('q', make_pair(7, 3));
+                    addPiece('k', make_pair(7, 4));
+                    addPiece('b', make_pair(7, 5));
+                    addPiece('n', make_pair(7, 6));
+                    addPiece('r', make_pair(7, 7));
+                    for(int i = 0; i < 8; i++){
+                        addPiece('p', make_pair(6, i));
+                    }
+                }
             }
 
 
