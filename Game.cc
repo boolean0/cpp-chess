@@ -189,15 +189,15 @@ void Game::startGame() {
                     string pos;
 
                     cin >> piece >> pos; 
-                    int y = pos[0] - 'a';
-                    int x = pos[1] - '1';
-                    cout << "x: " << x << " y: " << y << endl;
-                    if (!(x >= 0 && x < 8) || !(y >= 0 && y < 8)) {
+                    int col = pos[0] - 'a';
+                    int row = pos[1] - '1';
+                    cout << "row: " << row << " col: " << col << endl;
+                    if (!(row >= 0 && row < 8) || !(col >= 0 && col < 8)) {
                         cerr << "invalid position" << endl;
                         continue;
                     }
 
-                    pair<int,int> sqr = make_pair(x, y);
+                    pair<int,int> sqr = make_pair(row, col);
 
                     //TODO ? : add try catch
                     addPiece(piece, sqr);
@@ -206,16 +206,16 @@ void Game::startGame() {
                     string pos; 
                     cin >> pos;
                     
-                    int x = pos[0] - 'a';
-                    int y = pos[1] - '1';
+                    int row = pos[0] - 'a';
+                    int col = pos[1] - '1';
                     
-                    //handle bad input;
-                    if (!(x >= 0 && x < 8) || !(y >= 0 && y < 8)) {
+                    //handle bad inputcol
+                    if (!(row >= 0 && row < 8) || !(col >= 0 && col < 8)) {
                         cerr << "invalid position" << endl;
                         continue;
                     }
             
-                    board->setPiece(make_pair(x,y),nullptr);
+                    board->setPiece(make_pair(row,col),nullptr);
                 } 
                 else if (s == "=") {
                     string color;
