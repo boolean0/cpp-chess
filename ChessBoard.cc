@@ -37,6 +37,12 @@ bool ChessBoard::isPathClear(Move move) {
         return true;
     }
 
+    if(move.getMovedPiece()->getPieceSymbol()=='P'){
+        if(colDiff==0 && isOccupied(move.getEndPos())){
+            return false;
+        }
+    }
+
     while(curPos != move.getEndPos()){
         if(rowDiff > 0 && colDiff == 0){ //Piece is moving up (e.g. A1 -> A3)
             curPos.first++;
