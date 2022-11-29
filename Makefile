@@ -12,7 +12,7 @@ ${EXEC}: ${OBJECTS}
 ifndef VIEW
 	${CXX} ${CXXFLAGS} ${OBJECTS} -o ${EXEC} 
 else 
-	${CXX} ${CXXFLAGS} ${OBJECTS} -o ${EXEC} -lx11
+	${CXX} ${CXXFLAGS} ${OBJECTS} -o ${EXEC} -lX11
 endif 
 	
 -include ${DEPENDS}
