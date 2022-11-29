@@ -10,25 +10,25 @@ Queen::Queen(bool white, pair<int, int> position) : Piece{white, 9, position, 'Q
 
 vector<Move> Queen::generateMoves(){
     vector<Move> rawList = {};
-    int x = position.first;
-    int y = position.second;
+    int row = position.first;
+    int col = position.second;
     for(int i = 1; i < 8; i++){
-    rawList.push_back(Move{this, make_pair(x+i, y)});
-    rawList.push_back(Move{this, make_pair(x-i, y)});
-    rawList.push_back(Move{this, make_pair(x, y+i)});
-    rawList.push_back(Move{this, make_pair(x, y-i)});
-    rawList.push_back(Move{this, make_pair(x+i, y+i)});
-    rawList.push_back(Move{this, make_pair(x+i, y-i)});
-    rawList.push_back(Move{this, make_pair(x-i, y+i)});
-    rawList.push_back(Move{this, make_pair(x-i, y-i)});
+        rawList.push_back(Move{this, make_pair(row+i, col)});
+        rawList.push_back(Move{this, make_pair(row-i, col)});
+        rawList.push_back(Move{this, make_pair(row, col+i)});
+        rawList.push_back(Move{this, make_pair(row, col-i)});
+        rawList.push_back(Move{this, make_pair(row+i, col+i)});
+        rawList.push_back(Move{this, make_pair(row+i, col-i)});
+        rawList.push_back(Move{this, make_pair(row-i, col+i)});
+        rawList.push_back(Move{this, make_pair(row-i, col-i)});
     }
 
 
     vector<Move> moveList = {};
     for(Move move : rawList){
-        int x = move.getEndPos().first;
-        int y = move.getEndPos().second;
-        if(!((x < 0) || (x > 7) || (y < 0) || (y > 7))){
+        int row = move.getEndPos().first;
+        int col = move.getEndPos().second;
+        if(!((row < 0) || (row > 7) || (col < 0) || (col > 7))){
             moveList.push_back(move);
         }
     } 
