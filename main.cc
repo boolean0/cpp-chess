@@ -25,33 +25,33 @@ int main() {
             pair<int,int> sqr = make_pair(x, y);
             switch (c) {
                 case 'K': {
-                    King * k = new King{color, sqr};
-                    board.setPiece(sqr, k);    
+                    King * k = new King{(bool)color, sqr};
+                    board.setPiece(sqr, k);
                     break;
                 }
                 case 'Q': {
-                    Queen * q = new Queen{color, sqr};
+                    Queen * q = new Queen{(bool)color, sqr};
                     board.setPiece(sqr, q);
                     break;
                 }
                     
                 case 'R': {
-                    Rook * r  = new Rook{color, sqr};
+                    Rook * r  = new Rook{(bool)color, sqr};
                     board.setPiece(sqr, r);
                     break;
                 }
                 case 'B': {
-                    Bishop * b = new Bishop{color, sqr};    
+                    Bishop * b = new Bishop{(bool)color, sqr};    
                     board.setPiece(sqr, b);
                     break;
                 }
                 case 'N': {
-                    Knight * k = new Knight{color, sqr};
+                    Knight * k = new Knight{(bool)color, sqr};
                     board.setPiece(sqr, k);
                     break;
                 } 
                 case 'P': {
-                    Pawn * p = new Pawn{color, sqr};
+                    Pawn * p = new Pawn{(bool)color, sqr};
                     board.setPiece(sqr, p);
                     break;
                 }
