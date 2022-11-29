@@ -1,4 +1,4 @@
-#include "subject.h"
+#include "Subject.h"
 
 Subject::Subject() {}
 Subject::~Subject() {}
