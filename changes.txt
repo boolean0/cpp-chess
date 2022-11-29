@@ -2,6 +2,9 @@
 // Template:
 // [Class] : aslfdkjasdlkfjasdlkfj
 
+ChessBoard: 
+    changed selfInCheck() to isInCheck()
+
 Player: 
     added accessor for isCheckmate(), isStalemate(), getColor()
     !!! player now has access to the chessboard via pointer
@@ -11,6 +14,10 @@ AI:
     made generateMove() private
         since we now have pointer to chessboard, removed parameter board
 
+Game: 
+    make p1,p2 -> pw pb
+    prinstScoreBoard now private method
+    made a reset private method to clean up after game finishes
         
 Strategies!!!
 //Talk about shit we did 
@@ -18,4 +25,8 @@ Strategies!!!
 11-28th
     dummy constructor for move to make life easier
 
-
+11-28
+    Player:
+        move doMove function from player into chessboard
+    Game: 
+        added isSetup, isRunning

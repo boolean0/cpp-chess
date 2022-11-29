@@ -19,6 +19,7 @@ class ChessBoard{
         bool isOccupied(pair<int, int> square);
         bool checkMoveLegal(Move move);
         void printCLI();
+        void doMove(Move move);
 };
 
 #endif
