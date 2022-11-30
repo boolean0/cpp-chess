@@ -7,13 +7,10 @@
 
 using namespace std;
 
-class Rook : public Piece{
-    private: 
-        bool moved;
+class Rook : public Piece {
     public:
         Rook(bool isWhite, pair<int, int> position);
         vector<Move> generateMoves() override;
-        bool hasMoved();
 };
 
 #endif

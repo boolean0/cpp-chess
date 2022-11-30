@@ -11,7 +11,7 @@ class ChessBoard : public Subject {
         void trySetPiece(Move move);
         void resetMove(Move move);
         bool isPotentialMove(Move move); 
-        
+        void afterMove(Move move); 
     public:
         ~ChessBoard();
         void init(); 
