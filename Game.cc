@@ -145,8 +145,7 @@ void Game::addPiece(char piece, pair<int,int> sqr) {
             break;
         }
         default: {
-            cerr << "invalid piece" << endl;
-            break;
+            throw "Invalid piece";
         }
     }
 }
@@ -216,11 +215,16 @@ void Game::startGame() {
                         cerr << "invalid position" << endl;
                         continue;
                     }
-
                     pair<int,int> sqr = make_pair(row, col);
 
-                    //TODO ? : add try catch
-                    addPiece(piece, sqr);
+                    try{
+                        addPiece(piece, sqr);
+                    } catch(char const* invalidPieceMsg) {
+                        cerr << invalidPieceMsg << endl;
+                        continue;
+                    }
+
+                    board->printCLI();
                 }
                 else if (s == "-") {
                     char piece;
@@ -236,6 +240,7 @@ void Game::startGame() {
                     }
            
                     board->setPiece(make_pair(row, col),nullptr);
+                    board->printCLI();
                 } 
                 else if (s == "=") {
                     string color;
@@ -281,6 +286,7 @@ void Game::startGame() {
                     for(int i = 0; i < 8; i++){
                         addPiece('p', make_pair(6, i));
                     }
+                    board->printCLI();
                 }
             }
 
