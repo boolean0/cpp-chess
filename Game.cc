@@ -201,8 +201,7 @@ void Game::startGame() {
                 board->init();
                 isSetup = true;
             }
-                
-            // TODO: put into rows and cols instead of x,y
+
             string s;
             while (cin >> s) {                
                 if (s == "+") {
@@ -299,9 +298,23 @@ void Game::startGame() {
             }
             try{
                 Move curMove = cur->handleMove(); // can throw invalid arg
-               if (board->checkMoveLegal(curMove)) {
+                if (board->checkMoveLegal(curMove)) {
                     board->doMove(curMove);
                     board->printCLI();
+                    //checking checkmate & stalemate
+                    Player * opp = players[!turn];
+                    if(board->isInCheck(opp->getColor())){
+                        opp->setInCheck(true);
+                    }
+                    if(opp->isCheckmate()){
+                        cout << "CHECKMATE!" << endl;
+                        if(opp->getColor() == 1) pbScore++;
+                        else pwScore++;
+                        reset();
+                    } else if(opp->isStalemate()){
+                        cout << "STALEMATE!" << endl;
+                        reset();
+                    }
                     turn = !turn; // only when a valid move is played do we switch turns
                }
             }
