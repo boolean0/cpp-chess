@@ -18,8 +18,8 @@ class Game {
         bool isSetup;
         void printScoreBoard(); 
         void reset();
-
         void addPiece(char piece, pair<int,int> sqr);
+        bool existsTwoKings();
     public:
         Game();
         ~Game(); 
