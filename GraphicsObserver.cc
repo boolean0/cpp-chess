@@ -1,6 +1,10 @@
 #include <iostream>
 #include "GraphicsObserver.h"
+#include "Window.h"
 
+#ifndef VIEW
+#define VIEW 0
+#endif 
 using namespace std;
 
 GraphicsObserver::GraphicsObserver(ChessBoard *board): board{board} {
@@ -12,7 +16,8 @@ GraphicsObserver::~GraphicsObserver() {
 }
 
 void GraphicsObserver::notify() {
-    /*
+    #if VIEW >= 1
+    
     for(int i = 7; i >= 0; --i){ //starts from a8 (0,0)
         for(int j = 0; j < 8; j++){
             if(board->isOccupied(make_pair(i, j))){
@@ -34,5 +39,6 @@ void GraphicsObserver::notify() {
         }
         cout << endl;
     }
-    */
+    
+    #endif 
 }
