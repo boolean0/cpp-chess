@@ -161,7 +161,7 @@ void Game::startGame() {
         // make sure we prevent people from trying to move before starting a game
         if (input == "print") {
             //delete later, for testing
-            board->notifyObservers();
+            board->printCLI();
         }
         
         if (input == "game") {
@@ -191,7 +191,6 @@ void Game::startGame() {
                     cin >> piece >> pos; 
                     int col = pos[0] - 'a';
                     int row = pos[1] - '1';
-                    cout << "row: " << row << " col: " << col << endl;
                     if (!(row >= 0 && row < 8) || !(col >= 0 && col < 8)) {
                         cerr << "invalid position" << endl;
                         continue;
@@ -203,19 +202,19 @@ void Game::startGame() {
                     addPiece(piece, sqr);
                 }
                 else if (s == "-") {
+                    char piece;
                     string pos; 
-                    cin >> pos;
+                    cin >> piece >> pos;
+                    int col = pos[0] - 'a';
+                    int row = pos[1] - '1';
                     
-                    int row = pos[0] - 'a';
-                    int col = pos[1] - '1';
-                    
-                    //handle bad inputcol
-                    if (!(row >= 0 && row < 8) || !(col >= 0 && col < 8)) {
+                    //handle bad input;
+                    if (!(col >= 0 && col < 8) || !(row >= 0 && row < 8)) {
                         cerr << "invalid position" << endl;
                         continue;
                     }
-            
-                    board->setPiece(make_pair(row,col),nullptr);
+           
+                    board->setPiece(make_pair(row, col),nullptr);
                 } 
                 else if (s == "=") {
                     string color;
@@ -263,9 +262,11 @@ void Game::startGame() {
         } else if (input == "move") {
             try{
                 Move curMove = cur->handleMove();
-                if (board->checkMoveLegal(curMove)) {
+                board->printCLI();
+               if (board->checkMoveLegal(curMove)) {
                     board->doMove(curMove);
-                }
+                    board->printCLI();
+               }
             }
             catch (std::invalid_argument& err) {
                 cerr << err.what() << endl;
@@ -284,11 +285,14 @@ void Game::startGame() {
                 pwScore++;
             }
             reset();
-        } 
+        } else if(input == "test"){
+
+            addPiece('P', make_pair(3, 0));
+        }
     }
 
     // upon ending loop, 
-    printScoreBoard();
+    //printScoreBoard();
 }
 
 

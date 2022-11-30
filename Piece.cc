@@ -27,4 +27,9 @@ pair<int, int> Piece::getPosition(){
     return position;
 }
 
+void Piece::setPosition(pair<int, int> pos){
+    position = pos;
+}
+
+
 Piece::~Piece() {}
