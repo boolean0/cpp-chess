@@ -60,19 +60,19 @@ void Game::reset() {
 
 void assignPlayers(string player, int idx, Player** players, ChessBoard * board) {
             if (player == "human") {
-                players[idx] = new Person{1, false, false, false, board};
+                players[idx] = new Person{idx, false, false, false, board};
             } 
             else if (player == "computer1") {
-                players[idx] = new AILvl1{1, false, false, true, board};
+                players[idx] = new AILvl1{idx, false, false, true, board};
             }   
             else if (player == "computer2") {
-                players[idx] = new AILvl2{1, false, false, true, board};
+                players[idx] = new AILvl2{idx, false, false, true, board};
             }
             else if (player == "computer3") {
-                players[idx] = new AILvl3{1, false, false, true, board};
+                players[idx] = new AILvl3{idx, false, false, true, board};
             }
             else if (player == "computer4") {
-                players[idx] = new AILvl4{1, false, false, true, board};
+                players[idx] = new AILvl4{idx, false, false, true, board};
             }
             else {
                 string colour = idx == 1 ? "White" : "Black";
@@ -173,24 +173,25 @@ bool Game::existsTwoKings(){
 void Game::startGame() {
     bool isRunning = false;
     bool isSetup = false; 
-
+    Player *cur = nullptr;
     string input;
     cout << "Starting Chess Environment" << endl;
     while(cin >> input) {
-        Player *cur = players[turn];
-        // make sure we prevent people from trying to move before starting a game
+        
         if (input == "print") {
             //delete later, for testing
             board->printCLI();
         }
         
-        if (input == "game") {
+        else if (input == "game") {
             string pW, pB;
             cin >> pW >> pB;
             assignPlayers(pW, 1, players, board);
             assignPlayers(pB, 0, players, board);
             isRunning = true;
-        } else if (input == "setup") {
+        } 
+        
+        else if (input == "setup") {
             if (isRunning) {
                 cerr << "Game is already running; cannot enter setup mode!" << endl;
                 continue;       
@@ -292,16 +293,38 @@ void Game::startGame() {
 
 
         } else if (input == "move") {
+            if (!isRunning) {
+                cerr << "No game is running yet!" << endl;
+                continue;
+            }
             try{
-                Move curMove = cur->handleMove();
+                Move curMove = cur->handleMove(); // can throw invalid arg
                 if (board->checkMoveLegal(curMove)) {
                     board->doMove(curMove);
                     board->printCLI();
-                }
+                     turn = !turn; // only when a valid move is played do we switch turns
+               }
             }
             catch (std::invalid_argument& err) {
                 cerr << err.what() << endl;
-                continue;
+                //continue;
+            }
+
+            Player * opp = players[turn];
+            cout << "opponent color is: " << opp->getColor() << endl;
+            if(board->isInCheck(opp->getColor())){
+                cout << opp->getColor() << " in check"<<endl;
+                opp->setInCheck(true);
+            }
+            cout << "checking checkmate here" << endl;
+            if(opp->isCheckmate()){
+                cout << "CHECKMATE!" << endl;
+                if(opp->getColor() == 1) pbScore++;
+                else pwScore++;
+               // reset();
+            } else if(opp->isStalemate()){
+                cout << "STALEMATE!" << endl;
+                reset();
             }
 
             Player * opp = players[turn];
@@ -321,8 +344,9 @@ void Game::startGame() {
                 reset();
             }
             //TODO: check validity
-            //TODO: update player states  
-            turn = !turn;
+
+            //TODO: update player states 
+
         } else if (input == "resign") {
             if (cur->getColor() == 1) { //white resigns
                 pbScore++;
@@ -330,6 +354,14 @@ void Game::startGame() {
                 pwScore++;
             }
             reset();
+        }
+
+
+        
+        if (isRunning) { // both players initialized, game is running, prompt move from the other player
+             string colorsTurn = turn ? "White " : "Black ";
+            cout << colorsTurn << "to play:" << endl;
+            cur = players[turn];
         }
     }
 
