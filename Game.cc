@@ -51,7 +51,7 @@ void Game::reset() {
     isRunning = false;
     isSetup = false;
     board = new ChessBoard();
-    textView = new TextObserver{board}; 
+    textView = new TextObserver{board};
     graphicsView = new GraphicsObserver{board};
     players[0] = nullptr;
     players[1] = nullptr; // white is 1, black is 0

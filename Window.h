@@ -1,11 +1,13 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include <X11/Xlib.h>
+#if VIEW >= 1
+  #include <X11/Xlib.h>
 #include <iostream>
 #include <string>
 
 class Xwindow {
+
   Display *d;
   Window w;
   int s;
@@ -28,5 +30,5 @@ class Xwindow {
   void drawString(int x, int y, std::string msg);
 
 };
-
+#endif
 #endif
