@@ -161,7 +161,7 @@ void Game::startGame() {
         // make sure we prevent people from trying to move before starting a game
         if (input == "print") {
             //delete later, for testing
-            board->notifyObservers();
+            board->printCLI();
         }
         
         if (input == "game") {
@@ -239,9 +239,18 @@ void Game::startGame() {
         } else if (input == "move") {
             try{
                 Move curMove = cur->handleMove();
-                if (board->checkMoveLegal(curMove)) {
-                    board->doMove(curMove);
-                }
+                // cout << "Piece being moved: " << endl;
+                // cout << curMove.getMovedPiece()->getPieceSymbol() << " " << curMove.getMovedPiece()->isWhite() << endl;
+                // cout << curMove.getMovedPiece()->getPosition().first << " " << curMove.getMovedPiece()->getPosition().second << endl;
+                // cout << "End Position: " << endl; 
+                // cout << curMove.getEndPos().first << " " << curMove.getEndPos().second << endl;
+                cout << "after end pos, before checkmovelegal:" << endl;
+                board->printCLI();
+               //if (board->checkMoveLegal(curMove)) {
+                    board->doMove(curMove)
+                    cout << "after move is done: " << endl;
+                    board->printCLI();
+               }
             }
             catch (std::invalid_argument& err) {
                 cerr << err.what() << endl;
@@ -260,11 +269,14 @@ void Game::startGame() {
                 pwScore++;
             }
             reset();
-        } 
+        } else if(input == "test"){
+
+            addPiece('P', make_pair(3, 0));
+        }
     }
 
     // upon ending loop, 
-    printScoreBoard();
+    //printScoreBoard();
 }
 
 

@@ -31,3 +31,6 @@ Strategies!!!
     Game: 
         added isSetup, isRunning
         added addPiece helper function for setup mode
+
+11-29
+    ChessBoard: added trysetpiece

@@ -19,6 +19,7 @@ class Piece {
         int getPoints();
         char getPieceSymbol();
         pair<int, int> getPosition();
+        void setPosition(pair<int, int> pos);
         virtual ~Piece();
 };
 
