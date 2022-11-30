@@ -8,12 +8,9 @@
 using namespace std;
 
 class King : public Piece{
-    private: 
-        bool moved;
     public:
         King(bool isWhite, pair<int, int> position);
         vector<Move> generateMoves() override;
-        bool hasMoved();
 };
 
 #endif

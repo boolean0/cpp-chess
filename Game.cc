@@ -55,6 +55,7 @@ void Game::reset() {
     graphicsView = new GraphicsObserver{board};
     players[0] = nullptr;
     players[1] = nullptr; // white is 1, black is 0
+    turn = 1;
 }
 
 void assignPlayers(string player, int idx, Player** players, ChessBoard * board) {
@@ -262,7 +263,6 @@ void Game::startGame() {
         } else if (input == "move") {
             try{
                 Move curMove = cur->handleMove();
-                board->printCLI();
                if (board->checkMoveLegal(curMove)) {
                     board->doMove(curMove);
                     board->printCLI();
@@ -285,9 +285,6 @@ void Game::startGame() {
                 pwScore++;
             }
             reset();
-        } else if(input == "test"){
-
-            addPiece('P', make_pair(3, 0));
         }
     }
 

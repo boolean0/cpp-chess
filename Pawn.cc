@@ -6,7 +6,7 @@
 
 using namespace std;
 
-Pawn::Pawn(bool white, pair<int, int> position) : Piece{white, 1, position, 'P'}, moved{false} {}
+Pawn::Pawn(bool white, pair<int, int> position) : Piece{white, 1, position, 'P'} {}
 
 vector<Move> Pawn::generateMoves(){
     vector<Move> rawList = {};
@@ -16,11 +16,11 @@ vector<Move> Pawn::generateMoves(){
         if(row == 1 && !hasMoved()) rawList.push_back(Move{this, make_pair(row + 2, col)}); 
         rawList.push_back(Move{this, make_pair(row + 1, col)});
         rawList.push_back(Move{this, make_pair(row + 1, col + 1)});
-        rawList.push_back(Move{this, make_pair(row - 1, col + 1)});
+        rawList.push_back(Move{this, make_pair(row + 1, col - 1)});
       } else{
         if(row == 6 && !hasMoved()) rawList.push_back(Move{this, make_pair(row - 2, col)});
         rawList.push_back(Move{this, make_pair(row - 1, col)});
-        rawList.push_back(Move{this, make_pair(row + 1, col - 1)});
+        rawList.push_back(Move{this, make_pair(row - 1, col + 1)});
         rawList.push_back(Move{this, make_pair(row - 1, col - 1)});
      } 
 
@@ -33,12 +33,4 @@ vector<Move> Pawn::generateMoves(){
         }
     } 
     return moveList;
-}
-
-bool Pawn::hasMoved(){
-    return moved;
-}
-
-bool Pawn::setMoved(bool moved){
-    this->moved = moved;
 }

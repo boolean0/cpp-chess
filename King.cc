@@ -6,7 +6,7 @@
 
 using namespace std;
 
-King::King(bool white, pair<int, int> position) : Piece{white, 0, position, 'K'}, moved{false} {}
+King::King(bool white, pair<int, int> position) : Piece{white, 0, position, 'K'} {}
 
 vector<Move> King::generateMoves(){
     vector<Move> rawList = {};
@@ -32,6 +32,3 @@ vector<Move> King::generateMoves(){
     return moveList;
 }
 
-bool King::hasMoved(){
-    return moved;
-}

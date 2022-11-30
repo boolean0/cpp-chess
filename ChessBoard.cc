@@ -29,7 +29,6 @@ bool ChessBoard::isPathClear(Move move) { // setup exceptions?
 
     if(isOccupied(move.getEndPos()) && // todo do black
     (getPiece(move.getEndPos())->isWhite() == move.getMovedPiece()->isWhite())){
-        //check if endPos has a piece and if they are same color, return false
         return false;
     }
 
@@ -153,6 +152,13 @@ bool ChessBoard::simulateMove(Move move) {
     // simulates making the move; checks if after the move, you're in check, which 
     // makes the move invalid because the opponent can capture your king
     // does NOT change the state of the board after simulateMove finishes
+    if (move.getMovedPiece()->getPieceSymbol() == 'P') {
+        int colDiff = move.getEndPos().second - move.getStartPos().second;
+        if (colDiff != 0 && move.getCapturedPiece() == nullptr) {
+            cerr << "Pawn cannot move diagonally if there is no piece to capture!" << endl;
+            return false;
+        }
+    }
     trySetPiece(move); 
     bool colour = move.getMovedPiece()->isWhite();
     bool ret = true; 
@@ -165,11 +171,15 @@ bool ChessBoard::simulateMove(Move move) {
     return ret;
 }
 
-
+void ChessBoard::afterMove(Move move) {
+    move.getMovedPiece()->setMoved(true); 
+    //promo? 
+}
 
 void ChessBoard::doMove(Move move) { 
     // THIS ASSUMES THE MOVE IS VALID AND LEGAL
     // ONLY CALL AFTER ALL CHECKS ON MOVES HAVE BEEN DONE!
+
     setPiece(move.getEndPos(), move.getMovedPiece());
     cout << "Moved " << move.getMovedPiece()->getPieceSymbol() << " from (" <<
                 move.getStartPos().first << ", " << move.getStartPos().second
@@ -177,7 +187,11 @@ void ChessBoard::doMove(Move move) {
                 << ", )" << move.getEndPos().second << endl;
     setPiece(move.getStartPos(), nullptr);
     move.getMovedPiece()->setPosition(move.getEndPos());
+
+    afterMove(move);
 }
+
+
 
 Piece* ChessBoard::getPiece(pair<int, int> square) {
     return board[square.first][square.second];
