@@ -14,6 +14,7 @@ class Pawn : public Piece{
         Pawn(bool isWhite, pair<int, int> position);
         vector<Move> generateMoves() override;
         bool hasMoved();
+        bool setMoved(bool moved);
 };
 
 #endif
