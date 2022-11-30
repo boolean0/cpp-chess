@@ -30,7 +30,6 @@ bool ChessBoard::isPathClear(Move move) { // setup exceptions?
     if(isOccupied(move.getEndPos()) && // todo do black
     (getPiece(move.getEndPos())->isWhite() == move.getMovedPiece()->isWhite())){
         //check if endPos has a piece and if they are same color, return false
-        cerr << "Path is blocked!" << endl;
         return false;
     }
 
