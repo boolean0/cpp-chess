@@ -189,33 +189,33 @@ void Game::startGame() {
                     string pos;
 
                     cin >> piece >> pos; 
-                    int y = pos[0] - 'a';
-                    int x = pos[1] - '1';
-                    cout << "x: " << x << " y: " << y << endl;
-                    if (!(x >= 0 && x < 8) || !(y >= 0 && y < 8)) {
+                    int col = pos[0] - 'a';
+                    int row = pos[1] - '1';
+                    if (!(row >= 0 && row < 8) || !(col >= 0 && col < 8)) {
                         cerr << "invalid position" << endl;
                         continue;
                     }
 
-                    pair<int,int> sqr = make_pair(x, y);
+                    pair<int,int> sqr = make_pair(row, col);
 
                     //TODO ? : add try catch
                     addPiece(piece, sqr);
                 }
                 else if (s == "-") {
+                    char piece;
                     string pos; 
-                    cin >> pos;
+                    cin >> piece >> pos;
                     
-                    int x = pos[0] - 'a';
-                    int y = pos[1] - '1';
+                    int col = pos[0] - 'a';
+                    int row = pos[1] - '1';
                     
                     //handle bad input;
-                    if (!(x >= 0 && x < 8) || !(y >= 0 && y < 8)) {
+                    if (!(col >= 0 && col < 8) || !(row >= 0 && row < 8)) {
                         cerr << "invalid position" << endl;
                         continue;
                     }
             
-                    board->setPiece(make_pair(x,y),nullptr);
+                    board->setPiece(make_pair(row, col),nullptr);
                 } 
                 else if (s == "=") {
                     string color;
@@ -239,16 +239,9 @@ void Game::startGame() {
         } else if (input == "move") {
             try{
                 Move curMove = cur->handleMove();
-                // cout << "Piece being moved: " << endl;
-                // cout << curMove.getMovedPiece()->getPieceSymbol() << " " << curMove.getMovedPiece()->isWhite() << endl;
-                // cout << curMove.getMovedPiece()->getPosition().first << " " << curMove.getMovedPiece()->getPosition().second << endl;
-                // cout << "End Position: " << endl; 
-                // cout << curMove.getEndPos().first << " " << curMove.getEndPos().second << endl;
-                cout << "after end pos, before checkmovelegal:" << endl;
                 board->printCLI();
-               //if (board->checkMoveLegal(curMove)) {
-                    board->doMove(curMove)
-                    cout << "after move is done: " << endl;
+               if (board->checkMoveLegal(curMove)) {
+                    board->doMove(curMove);
                     board->printCLI();
                }
             }

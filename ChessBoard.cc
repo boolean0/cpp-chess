@@ -27,13 +27,6 @@ bool ChessBoard::isPathClear(Move move) { // setup exceptions?
     int colDiff = move.getEndPos().second - move.getMovedPiece()->getPosition().second;
     pair<int, int> curPos = move.getMovedPiece()->getPosition();
 
-    if (isOccupied(move.getEndPos())) {
-        cout << "Pieces on end squares:" << endl;
-        cout << getPiece(move.getEndPos())->getPieceSymbol() << " " 
-        << getPiece(move.getEndPos())->isWhite() << endl;
-    }
-    
-    
     if(isOccupied(move.getEndPos()) && // todo do black
     (getPiece(move.getEndPos())->isWhite() == move.getMovedPiece()->isWhite())){
         //check if endPos has a piece and if they are same color, return false
@@ -74,8 +67,6 @@ bool ChessBoard::isPathClear(Move move) { // setup exceptions?
             curPos.second--;
         }
         if(isOccupied(curPos) && curPos != move.getEndPos()){
-            cerr << "Cannot make that move because the path is blocked!" << endl;
-            cerr << move.getEndPos().first << " " << move.getEndPos().second << endl;
             return false;
         }
     }
@@ -112,7 +103,7 @@ bool ChessBoard::isInCheck(bool white){
     for(int i = 0; i < 8; i++){
         for(int j = 0; j < 8; j++){
             if(isOccupied(make_pair(i, j))){
-                if((getPiece(make_pair(i, j))->getPieceSymbol() == 'K') && (getPiece(make_pair(i, j))->isWhite() && white)){
+                if((getPiece(make_pair(i, j))->getPieceSymbol() == 'K') && (getPiece(make_pair(i, j))->isWhite() == white)){
                     kingPos = make_pair(i, j);
                 }
             }
@@ -164,13 +155,6 @@ bool ChessBoard::simulateMove(Move move) {
     // makes the move invalid because the opponent can capture your king
     // does NOT change the state of the board after simulateMove finishes
     trySetPiece(move); 
-
-    //testing
-    cout << "simulated board: " << endl;
-    notifyObservers();
-    ////////////////
-
-
     bool colour = move.getMovedPiece()->isWhite();
     bool ret = true; 
     if (isInCheck(colour)) {
@@ -188,10 +172,10 @@ void ChessBoard::doMove(Move move) {
     // THIS ASSUMES THE MOVE IS VALID AND LEGAL
     // ONLY CALL AFTER ALL CHECKS ON MOVES HAVE BEEN DONE!
     setPiece(move.getEndPos(), move.getMovedPiece());
-    cout << "Moved " << move.getMovedPiece()->getPieceSymbol() << " from " <<
+    cout << "Moved " << move.getMovedPiece()->getPieceSymbol() << " from (" <<
                 move.getStartPos().first << ", " << move.getStartPos().second
-                << " to " << move.getEndPos().first 
-                << ", " << move.getEndPos().second << endl;
+                << ") to (" << move.getEndPos().first 
+                << ", )" << move.getEndPos().second << endl;
     setPiece(move.getStartPos(), nullptr);
     move.getMovedPiece()->setPosition(move.getEndPos());
 }
@@ -226,16 +210,5 @@ bool ChessBoard::isPotentialMove(Move move) {
 }
 
 bool ChessBoard::checkMoveLegal(Move move) {
-    if (isPotentialMove(move)) { //explicit checks
-        if (isPathClear(move)) {
-            cout << "here: " << endl;
-            notifyObservers();
-            if (simulateMove(move)) { // breaks here..
-                cout << "Reset board: " << endl;
-                notifyObservers();
-                return true;
-            }
-        }
-    }
-    return false;
+    return isPotentialMove(move) && isPathClear(move) && simulateMove(move);
 }
