@@ -32,7 +32,6 @@ bool Player::getHasCastled() {
 
 bool Player::isCheckmate() { 
     if(getInCheck()){
-        std::cout << color << " is in check" << endl;
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
                 Piece *p = board->getPiece({i,j});
@@ -40,14 +39,17 @@ bool Player::isCheckmate() {
                     //check all pieces of same color as player for valid moves, if exists, return false. Else, return true.
                     vector<Move> ml = p->generateMoves();
                     for(Move m : ml){
-                        if(board->checkMoveLegal(m)){
-                            return false;
+                        try{
+                            if(board->checkMoveLegal(m)){
+                                return false;
+                            }
+                        } catch(std::invalid_argument &err){
+                            //do nothing
                         }
                     }
                 }
             }
         }
-        std::cout << "has no moves" << endl;
         return true;
     }
     //return false if not in check
@@ -55,15 +57,20 @@ bool Player::isCheckmate() {
 }
 
 bool Player::isStalemate() {
-    if(!inCheck){
+    if(!getInCheck()){
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
-                if(board->isOccupied({i, j}) && board->getPiece({i, j})->isWhite() == color){
+                Piece *p = board->getPiece({i,j});
+                if(board->isOccupied({i, j}) && p->isWhite() == color){
                     //check all pieces of same color as player for valid moves, if exists, return false. Else, return true.
-                    vector<Move> ml = board->getPiece({i, j})->generateMoves();
+                    vector<Move> ml = p->generateMoves();
                     for(Move m : ml){
-                        if(board->checkMoveLegal(m)){
-                            return false;
+                        try{
+                            if(board->checkMoveLegal(m)){
+                                return false;
+                            }
+                        } catch(std::invalid_argument &err){
+                            //do nothing
                         }
                     }
                 }

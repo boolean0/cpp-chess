@@ -201,8 +201,7 @@ void Game::startGame() {
                 board->init();
                 isSetup = true;
             }
-                
-            // TODO: put into rows and cols instead of x,y
+
             string s;
             while (cin >> s) {                
                 if (s == "+") {
@@ -311,34 +310,14 @@ void Game::startGame() {
             }
 
             Player * opp = players[turn];
-            cout << "opponent color is: " << opp->getColor() << endl;
             if(board->isInCheck(opp->getColor())){
-                cout << opp->getColor() << " in check"<<endl;
                 opp->setInCheck(true);
             }
-            cout << "checking checkmate here" << endl;
             if(opp->isCheckmate()){
                 cout << "CHECKMATE!" << endl;
                 if(opp->getColor() == 1) pbScore++;
                 else pwScore++;
-               // reset();
-            } else if(opp->isStalemate()){
-                cout << "STALEMATE!" << endl;
                 reset();
-            }
-
-            Player * opp = players[turn];
-            cout << "opponent color is: " << opp->getColor() << endl;
-            if(board->isInCheck(opp->getColor())){
-                cout << opp->getColor() << " in check"<<endl;
-                opp->setInCheck(true);
-            }
-            cout << "checking checkmate here" << endl;
-            if(opp->isCheckmate()){
-                cout << "CHECKMATE!" << endl;
-                if(opp->getColor() == 1) pbScore++;
-                else pwScore++;
-               // reset();
             } else if(opp->isStalemate()){
                 cout << "STALEMATE!" << endl;
                 reset();

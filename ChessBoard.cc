@@ -29,6 +29,7 @@ bool ChessBoard::isPathClear(Move move) { // setup exceptions?
 
     if(isOccupied(move.getEndPos()) && // todo do black
     (getPiece(move.getEndPos())->isWhite() == move.getMovedPiece()->isWhite())){
+        throw invalid_argument("Cannot move to a square occupied by your own piece!");
         return false;
     }
 
@@ -38,6 +39,7 @@ bool ChessBoard::isPathClear(Move move) { // setup exceptions?
 
     if(move.getMovedPiece()->getPieceSymbol()=='P'){
         if(colDiff==0 && isOccupied(move.getEndPos())){
+            throw invalid_argument("Pawns cannot capture forward!");
             return false;
         }
     }
@@ -65,6 +67,7 @@ bool ChessBoard::isPathClear(Move move) { // setup exceptions?
             curPos.second--;
         }
         if(isOccupied(curPos) && curPos != move.getEndPos()){
+            throw invalid_argument("Cannot move through a piece!");
             return false;
         }
     }
@@ -114,8 +117,12 @@ bool ChessBoard::isInCheck(bool white){
             if(isOccupied(curSqr) && (getPiece(kingPos)->isWhite() != getPiece(curSqr)->isWhite())){
                 vector<Move> ml = getPiece(curSqr)->generateMoves();
                 for(Move m : ml){
-                    if(isPathClear(m) && m.getEndPos() == kingPos){
-                        return true;
+                    try{
+                        if(isPathClear(m) && m.getEndPos() == kingPos){
+                            return true;
+                        }
+                    } catch(invalid_argument& e){
+                        //do nothing
                     }
                 }
             }
@@ -154,7 +161,7 @@ bool ChessBoard::simulateMove(Move move) {
     if (move.getMovedPiece()->getPieceSymbol() == 'P') {
         int colDiff = move.getEndPos().second - move.getStartPos().second;
         if (colDiff != 0 && move.getCapturedPiece() == nullptr) {
-            cerr << "Pawn cannot move diagonally if there is no piece to capture!" << endl;
+            throw invalid_argument("Pawn cannot move diagonally if there is no piece to capture!");
             return false;
         }
     }
@@ -162,7 +169,7 @@ bool ChessBoard::simulateMove(Move move) {
     bool colour = move.getMovedPiece()->isWhite();
     bool ret = true; 
     if (isInCheck(colour)) {
-        cerr << "Cannot make that move because it would put you in check, or you are already in check!" << endl;
+        throw invalid_argument("Cannot make that move because it would put you in check, or you are already in check!");
         ret = false;
     }
     
@@ -217,7 +224,7 @@ bool ChessBoard::isPotentialMove(Move move) {
     for (int i = 0; i < (int)moveList.size(); ++i) {
         if (moveList[i].getEndPos() == move.getEndPos()) return true;
     }
-    cerr << "Not a move that piece can make!" << endl;
+    throw invalid_argument("Not a move that piece can make!");
     return false;
 }
 
