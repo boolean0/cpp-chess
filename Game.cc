@@ -294,21 +294,35 @@ void Game::startGame() {
         } else if (input == "move") {
             try{
                 Move curMove = cur->handleMove();
-               if (board->checkMoveLegal(curMove)) {
+                if (board->checkMoveLegal(curMove)) {
                     board->doMove(curMove);
                     board->printCLI();
-               }
+                }
             }
             catch (std::invalid_argument& err) {
                 cerr << err.what() << endl;
                 continue;
             }
+
+            Player * opp = players[turn];
+            cout << "opponent color is: " << opp->getColor() << endl;
+            if(board->isInCheck(opp->getColor())){
+                cout << opp->getColor() << " in check"<<endl;
+                opp->setInCheck(true);
+            }
+            cout << "checking checkmate here" << endl;
+            if(opp->isCheckmate()){
+                cout << "CHECKMATE!" << endl;
+                if(opp->getColor() == 1) pbScore++;
+                else pwScore++;
+               // reset();
+            } else if(opp->isStalemate()){
+                cout << "STALEMATE!" << endl;
+                reset();
+            }
             //TODO: check validity
-
             //TODO: update player states  
-
             turn = !turn;
-
         } else if (input == "resign") {
             if (cur->getColor() == 1) { //white resigns
                 pbScore++;

@@ -112,7 +112,6 @@ bool ChessBoard::isInCheck(bool white){
         for(int j = 0; j < 8; j++){
             pair<int, int> curSqr = make_pair(i, j);
             if(isOccupied(curSqr) && (getPiece(kingPos)->isWhite() != getPiece(curSqr)->isWhite())){
-                cout << getPiece(curSqr)->getPieceSymbol() << " " << getPiece(curSqr)->isWhite() << endl;
                 vector<Move> ml = getPiece(curSqr)->generateMoves();
                 for(Move m : ml){
                     if(isPathClear(m) && m.getEndPos() == kingPos){
