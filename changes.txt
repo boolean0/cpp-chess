@@ -32,6 +32,17 @@ Strategies!!!
         added isSetup, isRunning
         added addPiece helper function for setup mode
 11-29
-    ChessBoard: added trysetpiece
-    Added preprocessor configurations for Window.h so that we can compile with or without the graphic configurations
+    ChessBoard: 
+        added trysetpiece
+    Makefile: 
+        Added preprocessor configurations for Window.h so that we can compile with or without the graphic configurations
+
+11-30
+    Piece: 
+        added hasmoved, setmoved, moved for all pieces by putting them in superclass
+    ChessBoard: 
+        added aftermove function that sets moved to true (can also handle other aftermoves later like castling or promotion)
+        Added checks for pawn moves in simulateMove that prevent moving diagonally if there is no piece to capture
+
+
 
