@@ -145,10 +145,29 @@ void Game::addPiece(char piece, pair<int,int> sqr) {
             break;
         }
         default: {
-            cerr << "invalid piece" << endl;
-            break;
+            throw "Invalid piece";
         }
     }
+}
+
+bool Game::existsTwoKings(){
+    int whiteKing = 0;
+    int blackKing = 0;
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            Piece *p = board->getPiece({i,j});
+            if(p != nullptr) {
+                if (p->getPieceSymbol() == 'K' && p->isWhite()) 
+                    whiteKing++;
+                else if (p->getPieceSymbol() == 'K' && !p->isWhite())
+                    blackKing++;
+            }
+        }
+    }
+    if(whiteKing == 1 && blackKing == 1) 
+        return true;
+    else
+        return false;
 }
 
 void Game::startGame() {
@@ -196,11 +215,16 @@ void Game::startGame() {
                         cerr << "invalid position" << endl;
                         continue;
                     }
-
                     pair<int,int> sqr = make_pair(row, col);
 
-                    //TODO ? : add try catch
-                    addPiece(piece, sqr);
+                    try{
+                        addPiece(piece, sqr);
+                    } catch(char const* invalidPieceMsg) {
+                        cerr << invalidPieceMsg << endl;
+                        continue;
+                    }
+
+                    board->printCLI();
                 }
                 else if (s == "-") {
                     char piece;
@@ -216,6 +240,7 @@ void Game::startGame() {
                     }
            
                     board->setPiece(make_pair(row, col),nullptr);
+                    board->printCLI();
                 } 
                 else if (s == "=") {
                     string color;
@@ -231,7 +256,12 @@ void Game::startGame() {
                     }
                 }
                 else if (s == "done") {
-                    break;
+                    if(existsTwoKings()){
+                        break;
+                    }
+                    else {
+                        cerr << "There must be exactly one king of each colour on the board!" << endl;
+                    }
                 }
                 else if(s == "default") {
                     addPiece('R', make_pair(0, 0));
@@ -256,6 +286,7 @@ void Game::startGame() {
                     for(int i = 0; i < 8; i++){
                         addPiece('p', make_pair(6, i));
                     }
+                    board->printCLI();
                 }
             }
 
