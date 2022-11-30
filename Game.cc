@@ -301,26 +301,26 @@ void Game::startGame() {
                 if (board->checkMoveLegal(curMove)) {
                     board->doMove(curMove);
                     board->printCLI();
-                     turn = !turn; // only when a valid move is played do we switch turns
+                    //checking checkmate & stalemate
+                    Player * opp = players[!turn];
+                    if(board->isInCheck(opp->getColor())){
+                        opp->setInCheck(true);
+                    }
+                    if(opp->isCheckmate()){
+                        cout << "CHECKMATE!" << endl;
+                        if(opp->getColor() == 1) pbScore++;
+                        else pwScore++;
+                        reset();
+                    } else if(opp->isStalemate()){
+                        cout << "STALEMATE!" << endl;
+                        reset();
+                    }
+                    turn = !turn; // only when a valid move is played do we switch turns
                }
             }
             catch (std::invalid_argument& err) {
                 cerr << err.what() << endl;
                 //continue;
-            }
-
-            Player * opp = players[turn];
-            if(board->isInCheck(opp->getColor())){
-                opp->setInCheck(true);
-            }
-            if(opp->isCheckmate()){
-                cout << "CHECKMATE!" << endl;
-                if(opp->getColor() == 1) pbScore++;
-                else pwScore++;
-                reset();
-            } else if(opp->isStalemate()){
-                cout << "STALEMATE!" << endl;
-                reset();
             }
             //TODO: check validity
 

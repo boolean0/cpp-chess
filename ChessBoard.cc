@@ -169,6 +169,7 @@ bool ChessBoard::simulateMove(Move move) {
     bool colour = move.getMovedPiece()->isWhite();
     bool ret = true; 
     if (isInCheck(colour)) {
+        resetMove(move);
         throw invalid_argument("Cannot make that move because it would put you in check, or you are already in check!");
         ret = false;
     }
