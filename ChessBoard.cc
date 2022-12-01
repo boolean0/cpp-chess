@@ -22,14 +22,14 @@ ChessBoard::~ChessBoard() {
     }
 }
 
-bool ChessBoard::isPathClear(Move move) {
+bool ChessBoard::isPathClear(Move move) { // setup exceptions? 
     int rowDiff = move.getEndPos().first - move.getMovedPiece()->getPosition().first;
     int colDiff = move.getEndPos().second - move.getMovedPiece()->getPosition().second;
     pair<int, int> curPos = move.getMovedPiece()->getPosition();
 
-    if(isOccupied(move.getEndPos()) && 
-    (getPiece(move.getEndPos())->isWhite() && move.getMovedPiece()->isWhite())){
-        //check if endPos has a piece and if they are same color, return false
+    if(isOccupied(move.getEndPos()) && // todo do black
+    (getPiece(move.getEndPos())->isWhite() == move.getMovedPiece()->isWhite())){
+        throw invalid_argument("Cannot move to a square occupied by your own piece!");
         return false;
     }
 
@@ -39,6 +39,7 @@ bool ChessBoard::isPathClear(Move move) {
 
     if(move.getMovedPiece()->getPieceSymbol()=='P'){
         if(colDiff==0 && isOccupied(move.getEndPos())){
+            throw invalid_argument("Pawns cannot capture forward!");
             return false;
         }
     }
@@ -66,10 +67,35 @@ bool ChessBoard::isPathClear(Move move) {
             curPos.second--;
         }
         if(isOccupied(curPos) && curPos != move.getEndPos()){
+            throw invalid_argument("Cannot move through a piece!");
             return false;
         }
     }
     return true;
+}
+
+void ChessBoard::printCLI() {
+    for(int i = 7; i >= 0; --i){ //starts from a8 (0,0)
+        for(int j = 0; j < 8; j++){
+            if(isOccupied(make_pair(i, j))){
+                Piece* piece = getPiece(make_pair(i, j));
+                if(piece->isWhite()){
+                    cout << piece->getPieceSymbol();
+                } else {
+                    char lower = tolower(piece->getPieceSymbol());
+                    cout << lower;
+                }
+            } else {
+                //check for white or black square
+                if((i+j)%2 == 0){
+                    cout << ' ';
+                } else{
+                    cout << '_';
+                }
+            }
+        }
+        cout << endl;
+    }
 }
 
 bool ChessBoard::isInCheck(bool white){
@@ -78,7 +104,7 @@ bool ChessBoard::isInCheck(bool white){
     for(int i = 0; i < 8; i++){
         for(int j = 0; j < 8; j++){
             if(isOccupied(make_pair(i, j))){
-                if((getPiece(make_pair(i, j))->getPieceSymbol() == 'K') && (getPiece(make_pair(i, j))->isWhite() && white)){
+                if((getPiece(make_pair(i, j))->getPieceSymbol() == 'K') && (getPiece(make_pair(i, j))->isWhite() == white)){
                     kingPos = make_pair(i, j);
                 }
             }
@@ -87,11 +113,16 @@ bool ChessBoard::isInCheck(bool white){
     //loop through each piece and check moves to see if kingPos is one of them
     for(int i = 0; i < 8; i++){
         for(int j = 0; j < 8; j++){
-            if(isOccupied(make_pair(i, j))){
-                vector<Move> ml = getPiece(make_pair(i, j))->generateMoves();
+            pair<int, int> curSqr = make_pair(i, j);
+            if(isOccupied(curSqr) && (getPiece(kingPos)->isWhite() != getPiece(curSqr)->isWhite())){
+                vector<Move> ml = getPiece(curSqr)->generateMoves();
                 for(Move m : ml){
-                    if(isPathClear(m) && m.getEndPos() == kingPos){
-                        return true;
+                    try{
+                        if(isPathClear(m) && m.getEndPos() == kingPos){
+                            return true;
+                        }
+                    } catch(invalid_argument& e){
+                        //do nothing
                     }
                 }
             }
@@ -101,20 +132,80 @@ bool ChessBoard::isInCheck(bool white){
     return false;
 }
 
+void ChessBoard::trySetPiece(Move move) {
+    // makes the move without destroying the pointer of any piece that was taken so that
+    // it can be reinstated at the end
+
+    int rowEnd = move.getEndPos().first;
+    int colEnd = move.getEndPos().second;
+    int rowStart = move.getStartPos().first; 
+    int colStart = move.getStartPos().second;
+    board[rowEnd][colEnd] = move.getMovedPiece();
+    board[rowStart][colStart] = nullptr; 
+
+}
+
+void ChessBoard::resetMove(Move move) {
+    int rowEnd = move.getEndPos().first;
+    int colEnd = move.getEndPos().second;
+    int rowStart = move.getStartPos().first; 
+    int colStart = move.getStartPos().second;
+    board[rowEnd][colEnd] = move.getCapturedPiece();
+    board[rowStart][colStart] = move.getMovedPiece();
+}
+
+bool ChessBoard::simulateMove(Move move) { 
+    // simulates making the move; checks if after the move, you're in check, which 
+    // makes the move invalid because the opponent can capture your king
+    // does NOT change the state of the board after simulateMove finishes
+    if (move.getMovedPiece()->getPieceSymbol() == 'P') {
+        int colDiff = move.getEndPos().second - move.getStartPos().second;
+        if (colDiff != 0 && move.getCapturedPiece() == nullptr) {
+            throw invalid_argument("Pawn cannot move diagonally if there is no piece to capture!");
+            return false;
+        }
+    }
+    trySetPiece(move); 
+    bool colour = move.getMovedPiece()->isWhite();
+    bool ret = true; 
+    if (isInCheck(colour)) {
+        resetMove(move);
+        throw invalid_argument("Cannot make that move because it would put you in check, or you are already in check!");
+        ret = false;
+    }
+    
+    resetMove(move); 
+    return ret;
+}
+
+void ChessBoard::afterMove(Move move) {
+    move.getMovedPiece()->setMoved(true); 
+    //promo? 
+}
 
 void ChessBoard::doMove(Move move) { 
     // THIS ASSUMES THE MOVE IS VALID AND LEGAL
     // ONLY CALL AFTER ALL CHECKS ON MOVES HAVE BEEN DONE!
+
     setPiece(move.getEndPos(), move.getMovedPiece());
+    cout << "Moved " << move.getMovedPiece()->getPieceSymbol() << " from (" <<
+                move.getStartPos().first << ", " << move.getStartPos().second
+                << ") to (" << move.getEndPos().first 
+                << "," << move.getEndPos().second << ")" << endl;
     setPiece(move.getStartPos(), nullptr);
+    move.getMovedPiece()->setPosition(move.getEndPos());
+
+    afterMove(move);
 }
+
+
 
 Piece* ChessBoard::getPiece(pair<int, int> square) {
     return board[square.first][square.second];
 }
 
 void ChessBoard::setPiece(pair<int,int> square, Piece* piece) {
-    delete board[square.first][square.second];
+    //delete board[square.first][square.second];
     board[square.first][square.second] = piece;
 }
 
@@ -126,6 +217,18 @@ bool ChessBoard::isOccupied(pair<int,int> square) {
     return !(board[square.first][square.second] == nullptr);
 }
 
+bool ChessBoard::isPotentialMove(Move move) {
+    // checks if a piece could potentially move to the square given its move patterns
+    Piece * movingPiece = move.getMovedPiece(); 
+    vector<Move> moveList = movingPiece->generateMoves();
+
+    for (int i = 0; i < (int)moveList.size(); ++i) {
+        if (moveList[i].getEndPos() == move.getEndPos()) return true;
+    }
+    throw invalid_argument("Not a move that piece can make!");
+    return false;
+}
+
 bool ChessBoard::checkMoveLegal(Move move) {
-    return true;
+    return isPotentialMove(move) && isPathClear(move) && simulateMove(move);
 }

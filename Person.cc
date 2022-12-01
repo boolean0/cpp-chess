@@ -33,6 +33,12 @@ Move Person::parseMoveInput() {
     if (!board->isOccupied(starting)) {
         throw invalid_argument("No piece to move at that square!");
     }
+    // checking if there is a piece of the right colour to move
+    else if(board->isOccupied(starting) && (board->getPiece(starting)->isWhite() != getColor())) {
+        string color = getColor() ? "white" : "black";
+        string arg = "No " + color + " piece to move at that square!";
+        throw invalid_argument(arg);
+    }
     Move playerMove{board->getPiece(starting), ending,
         board->getPiece(ending) != nullptr 
             ? board->getPiece(ending) 

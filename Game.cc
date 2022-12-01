@@ -51,27 +51,28 @@ void Game::reset() {
     isRunning = false;
     isSetup = false;
     board = new ChessBoard();
-    textView = new TextObserver{board}; 
+    textView = new TextObserver{board};
     graphicsView = new GraphicsObserver{board};
     players[0] = nullptr;
     players[1] = nullptr; // white is 1, black is 0
+    turn = 1;
 }
 
 void assignPlayers(string player, int idx, Player** players, ChessBoard * board) {
             if (player == "human") {
-                players[idx] = new Person{1, false, false, false, board};
+                players[idx] = new Person{idx, false, false, false, board};
             } 
             else if (player == "computer1") {
-                players[idx] = new AILvl1{1, false, false, true, board};
+                players[idx] = new AILvl1{idx, false, false, true, board};
             }   
             else if (player == "computer2") {
-                players[idx] = new AILvl2{1, false, false, true, board};
+                players[idx] = new AILvl2{idx, false, false, true, board};
             }
             else if (player == "computer3") {
-                players[idx] = new AILvl3{1, false, false, true, board};
+                players[idx] = new AILvl3{idx, false, false, true, board};
             }
             else if (player == "computer4") {
-                players[idx] = new AILvl4{1, false, false, true, board};
+                players[idx] = new AILvl4{idx, false, false, true, board};
             }
             else {
                 string colour = idx == 1 ? "White" : "Black";
@@ -144,33 +145,53 @@ void Game::addPiece(char piece, pair<int,int> sqr) {
             break;
         }
         default: {
-            cerr << "invalid piece" << endl;
-            break;
+            throw "Invalid piece";
         }
     }
+}
+
+bool Game::existsTwoKings(){
+    int whiteKing = 0;
+    int blackKing = 0;
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            Piece *p = board->getPiece({i,j});
+            if(p != nullptr) {
+                if (p->getPieceSymbol() == 'K' && p->isWhite()) 
+                    whiteKing++;
+                else if (p->getPieceSymbol() == 'K' && !p->isWhite())
+                    blackKing++;
+            }
+        }
+    }
+    if(whiteKing == 1 && blackKing == 1) 
+        return true;
+    else
+        return false;
 }
 
 void Game::startGame() {
     bool isRunning = false;
     bool isSetup = false; 
-
+    Player *cur = nullptr;
     string input;
     cout << "Starting Chess Environment" << endl;
     while(cin >> input) {
-        Player *cur = players[turn];
-        // make sure we prevent people from trying to move before starting a game
+        
         if (input == "print") {
             //delete later, for testing
-            board->notifyObservers();
+            board->printCLI();
         }
         
-        if (input == "game") {
+        else if (input == "game") {
             string pW, pB;
             cin >> pW >> pB;
             assignPlayers(pW, 1, players, board);
             assignPlayers(pB, 0, players, board);
             isRunning = true;
-        } else if (input == "setup") {
+        } 
+        
+        else if (input == "setup") {
             if (isRunning) {
                 cerr << "Game is already running; cannot enter setup mode!" << endl;
                 continue;       
@@ -180,8 +201,7 @@ void Game::startGame() {
                 board->init();
                 isSetup = true;
             }
-                
-            // TODO: put into rows and cols instead of x,y
+
             string s;
             while (cin >> s) {                
                 if (s == "+") {
@@ -191,31 +211,36 @@ void Game::startGame() {
                     cin >> piece >> pos; 
                     int col = pos[0] - 'a';
                     int row = pos[1] - '1';
-                    cout << "row: " << row << " col: " << col << endl;
                     if (!(row >= 0 && row < 8) || !(col >= 0 && col < 8)) {
                         cerr << "invalid position" << endl;
                         continue;
                     }
-
                     pair<int,int> sqr = make_pair(row, col);
 
-                    //TODO ? : add try catch
-                    addPiece(piece, sqr);
+                    try{
+                        addPiece(piece, sqr);
+                    } catch(char const* invalidPieceMsg) {
+                        cerr << invalidPieceMsg << endl;
+                        continue;
+                    }
+
+                    board->printCLI();
                 }
                 else if (s == "-") {
+                    char piece;
                     string pos; 
-                    cin >> pos;
+                    cin >> piece >> pos;
+                    int col = pos[0] - 'a';
+                    int row = pos[1] - '1';
                     
-                    int row = pos[0] - 'a';
-                    int col = pos[1] - '1';
-                    
-                    //handle bad inputcol
-                    if (!(row >= 0 && row < 8) || !(col >= 0 && col < 8)) {
+                    //handle bad input;
+                    if (!(col >= 0 && col < 8) || !(row >= 0 && row < 8)) {
                         cerr << "invalid position" << endl;
                         continue;
                     }
-            
-                    board->setPiece(make_pair(row,col),nullptr);
+           
+                    board->setPiece(make_pair(row, col),nullptr);
+                    board->printCLI();
                 } 
                 else if (s == "=") {
                     string color;
@@ -231,7 +256,12 @@ void Game::startGame() {
                     }
                 }
                 else if (s == "done") {
-                    break;
+                    if(existsTwoKings()){
+                        break;
+                    }
+                    else {
+                        cerr << "There must be exactly one king of each colour on the board!" << endl;
+                    }
                 }
                 else if(s == "default") {
                     addPiece('R', make_pair(0, 0));
@@ -256,26 +286,45 @@ void Game::startGame() {
                     for(int i = 0; i < 8; i++){
                         addPiece('p', make_pair(6, i));
                     }
+                    board->printCLI();
                 }
             }
 
 
         } else if (input == "move") {
+            if (!isRunning) {
+                cerr << "No game is running yet!" << endl;
+                continue;
+            }
             try{
-                Move curMove = cur->handleMove();
+                Move curMove = cur->handleMove(); // can throw invalid arg
                 if (board->checkMoveLegal(curMove)) {
                     board->doMove(curMove);
-                }
+                    board->printCLI();
+                    //checking checkmate & stalemate
+                    Player * opp = players[!turn];
+                    if(board->isInCheck(opp->getColor())){
+                        opp->setInCheck(true);
+                    }
+                    if(opp->isCheckmate()){
+                        cout << "CHECKMATE!" << endl;
+                        if(opp->getColor() == 1) pbScore++;
+                        else pwScore++;
+                        reset();
+                    } else if(opp->isStalemate()){
+                        cout << "STALEMATE!" << endl;
+                        reset();
+                    }
+                    turn = !turn; // only when a valid move is played do we switch turns
+               }
             }
             catch (std::invalid_argument& err) {
                 cerr << err.what() << endl;
-                continue;
+                //continue;
             }
             //TODO: check validity
 
-            //TODO: update player states  
-
-            turn = !turn;
+            //TODO: update player states 
 
         } else if (input == "resign") {
             if (cur->getColor() == 1) { //white resigns
@@ -284,11 +333,19 @@ void Game::startGame() {
                 pwScore++;
             }
             reset();
-        } 
+        }
+
+
+        
+        if (isRunning) { // both players initialized, game is running, prompt move from the other player
+             string colorsTurn = turn ? "White " : "Black ";
+            cout << colorsTurn << "to play:" << endl;
+            cur = players[turn];
+        }
     }
 
     // upon ending loop, 
-    printScoreBoard();
+    //printScoreBoard();
 }
 
 
