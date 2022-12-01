@@ -1,5 +1,9 @@
 #include "ChessBoard.h"
 #include "Piece.h"
+#include "Queen.h"
+#include "Rook.h"
+#include "Bishop.h"
+#include "Knight.h"
 #include <iostream>
 #include <utility>
 #include <vector>
@@ -179,8 +183,39 @@ bool ChessBoard::simulateMove(Move move) {
 }
 
 void ChessBoard::afterMove(Move move) {
-    move.getMovedPiece()->setMoved(true); 
-    //promo? 
+    Piece * p = move.getMovedPiece();
+    p->setMoved(true);  
+   /* if(p->getPieceSymbol() == 'P'){
+        int rowDiff = move.getEndPos().first - move.getStartPos().first;
+        if(rowDiff == 2 || rowDiff == -2){
+            p->setEnPassant(true);
+        }
+    } */
+
+    if(p->getPieceSymbol() == 'P' && (move.getEndPos().first == 0 || move.getEndPos().first == 7)){
+        //pawn promotion
+        char newPiece;
+        cout << "Enter the piece you want to promote to (Q, R, B, N): ";
+        while(cin >> newPiece){
+            if(newPiece == 'Q'){
+                board[move.getEndPos().first][move.getEndPos().second] = new Queen(p->isWhite(), move.getEndPos());
+                break;
+            } else if(newPiece == 'R'){
+                board[move.getEndPos().first][move.getEndPos().second] = new Rook(p->isWhite(), move.getEndPos());
+                break;
+            } else if(newPiece == 'B'){
+                board[move.getEndPos().first][move.getEndPos().second] = new Bishop(p->isWhite(), move.getEndPos());
+                break;
+            } else if(newPiece == 'N'){
+                board[move.getEndPos().first][move.getEndPos().second] = new Knight(p->isWhite(), move.getEndPos());
+                break;
+            } else{
+                cout << "Invalid piece. Try again." << endl;
+                continue;
+            }
+        }
+        delete p;
+    }
 }
 
 void ChessBoard::doMove(Move move) { 
