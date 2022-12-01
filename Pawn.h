@@ -8,9 +8,12 @@
 using namespace std;
 
 class Pawn : public Piece{
+    bool enPassant;
     public:
         Pawn(bool isWhite, pair<int, int> position);
         vector<Move> generateMoves() override;
+        void setEnPassant(bool enPassant);
+        bool getEnPassant();
         
 };
 

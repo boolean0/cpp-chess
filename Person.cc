@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include "Person.h"
 #include "ChessBoard.h"
+#include "Pawn.h"
 
 using namespace std;
 
@@ -39,25 +40,49 @@ Move Person::parseMoveInput() {
         string arg = "No " + color + " piece to move at that square!";
         throw invalid_argument(arg);
     }
-    Move playerMove{board->getPiece(starting), ending,
+    Move playerMove{board->getPiece(starting), starting, ending,
         board->getPiece(ending) != nullptr 
             ? board->getPiece(ending) 
             : nullptr};
     
     //enpassant
-    // if(board->getPiece(starting)->getPieceSymbol()=='P'){ // is moving piece a pawn?
-    //     if(ending.second==2 && board->getPiece(starting)->isWhite()){ // is pawn moving to row 2
-    //         if(board->getPiece(make_pair(playerMove.getEndPos().first,3))!=nullptr){
-    //             if(board->getPiece(make_pair(playerMove.getEndPos().first,3))->getPieceSymbol()=='P'){
-    //                 if(board->getPiece(make_pair(playerMove.getEndPos().first,3))->getEnPassant()){
-    //                     playerMove.setEnPassant(true);
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-
-
+    /*
+        KNOWN BUG CASE:
+        setup default done game human human
+        move e2 e4
+        move a7 a6
+        move e4 e5
+        move d7 d5
+        move e5 d6
+        move a6 a5
+        move d6 d7
+        move a5 a4 -> WHITE PAWN DISAPPEARS
+    */
+    if(board->getPiece(starting)->getPieceSymbol()=='P'){ // is moving piece a pawn?
+        if(ending.first==5 && board->getPiece(starting)->isWhite()){ // is it a white pawn moving to row 5 ?   
+            if(board->isOccupied(make_pair(4, ending.second)) 
+            && board->getPiece(make_pair(4,ending.second))->getPieceSymbol() == 'P'
+            && !board->getPiece(make_pair(4, ending.second))->isWhite()){ // is there a black pawn in the enpassant square?
+                Pawn *p = dynamic_cast<Pawn*>(board->getPiece(make_pair(4, ending.second)));
+                if(p->getEnPassant()){ // is the black pawn in the enpassant square eligible for enpassant?
+                    Move enPassantMove{board->getPiece(starting), starting, ending, p, false, false, false, '\0', true};
+                    cout << "just made EP move!" << endl;
+                    return enPassantMove;
+                }
+            }
+        } else if(ending.first==2 && !board->getPiece(starting)->isWhite()){ // is it a black pawn moving to row 5 ?   
+            if(board->isOccupied(make_pair(3, ending.second)) 
+            && board->getPiece(make_pair(3,ending.second))->getPieceSymbol() == 'P'
+            && board->getPiece(make_pair(3, ending.second))->isWhite()){ // is there a white pawn in the enpassant square?
+                Pawn *p = dynamic_cast<Pawn*>(board->getPiece(make_pair(3, ending.second)));
+                if(p->getEnPassant()){ // is the white pawn in the enpassant square eligible for enpassant?
+                    Move enPassantMove{board->getPiece(starting), starting, ending, p, false, false, false, '\0', true};
+                    cout << "just made EP move!" << endl;
+                    return enPassantMove;
+                }
+            }
+        }
+    }
     return playerMove;
 }
 

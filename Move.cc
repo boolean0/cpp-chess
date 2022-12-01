@@ -3,8 +3,9 @@
 
 using namespace std;
 
-Move::Move(Piece* movedPiece, pair<int,int> endPos, Piece* capturedPiece) : // for regular moves
+Move::Move(Piece* movedPiece, pair<int, int> startPos, pair<int,int> endPos, Piece* capturedPiece) : // for regular moves
     movedPiece{movedPiece}, 
+    startPos{startPos},
     endPos{endPos}, 
     capturedPiece{capturedPiece},
     isCastleK{false},
@@ -12,8 +13,9 @@ Move::Move(Piece* movedPiece, pair<int,int> endPos, Piece* capturedPiece) : // f
     isPromoting{false},
     isEP{false}{}
 
-Move::Move(Piece* movedPiece, pair<int, int> endPos, Piece* capturedPiece, bool isCastleK, bool isCastleQ, bool isPromoting, char promoteTo, bool isEP) :
+Move::Move(Piece* movedPiece, pair<int, int> startPos, pair<int, int> endPos, Piece* capturedPiece, bool isCastleK, bool isCastleQ, bool isPromoting, char promoteTo, bool isEP) :
     movedPiece{movedPiece},
+    startPos{startPos},
     endPos{endPos}, 
     capturedPiece{capturedPiece},
     isCastleK{isCastleK},
@@ -37,7 +39,7 @@ Piece* Move::getMovedPiece(){
 }
 
 pair<int, int> Move::getStartPos(){
-    return movedPiece->getPosition();
+    return startPos;
 }
 
 pair<int, int> Move::getEndPos(){

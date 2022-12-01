@@ -13,10 +13,10 @@ vector<Move> Bishop::generateMoves(){
     int row = position.first;
     int col = position.second;
     for(int i = 1; i < 8; i++){
-        rawList.push_back(Move{this, make_pair(row+i, col+i)});
-        rawList.push_back(Move{this, make_pair(row+i, col-i)});
-        rawList.push_back(Move{this, make_pair(row-i, col+i)});
-        rawList.push_back(Move{this, make_pair(row-i, col-i)});
+        rawList.push_back(Move{this, position, make_pair(row+i, col+i)});
+        rawList.push_back(Move{this, position, make_pair(row+i, col-i)});
+        rawList.push_back(Move{this, position, make_pair(row-i, col+i)});
+        rawList.push_back(Move{this, position, make_pair(row-i, col-i)});
     }
 
     vector<Move> moveList = {};

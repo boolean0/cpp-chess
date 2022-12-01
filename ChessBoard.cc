@@ -4,6 +4,7 @@
 #include "Rook.h"
 #include "Bishop.h"
 #include "Knight.h"
+#include "Pawn.h"
 #include <iostream>
 #include <utility>
 #include <vector>
@@ -183,17 +184,39 @@ bool ChessBoard::simulateMove(Move move) {
 }
 
 void ChessBoard::afterMove(Move move) {
+    cout << "After move: " << endl;
     Piece * p = move.getMovedPiece();
-    p->setMoved(true);  
-   /* if(p->getPieceSymbol() == 'P'){
+    p->setMoved(true);
+
+    //if pawn was captured, and it was enpassant, remove it from the board
+    if(move.getCapturedPiece() != nullptr && move.getCapturedPiece()->getPieceSymbol() == 'P'){
+        cout << "pawn was captured" << endl;
+        if(dynamic_cast<Pawn *>(move.getCapturedPiece())->getEnPassant()){
+            cout << "via enpassant" << endl;
+            pair<int, int> capturedPawnPos = move.getCapturedPiece()->getPosition();
+            board[capturedPawnPos.first][capturedPawnPos.second] = nullptr;
+            delete move.getCapturedPiece();
+        }
+    }
+    //set all pawns enpassant value to false
+    for(int i = 0; i < 8; i++){
+        for(int j = 0; j < 8; j++){
+            Piece *tmp = getPiece(make_pair(i, j));
+            if(tmp != nullptr && tmp->getPieceSymbol() == 'P'){
+                dynamic_cast<Pawn *>(tmp)->setEnPassant(false);
+            }
+        }
+    }
+    //if pawn was the moved piece, and it just moved two squares, set enpassant to true
+    if(p->getPieceSymbol() == 'P'){
         int rowDiff = move.getEndPos().first - move.getStartPos().first;
         if(rowDiff == 2 || rowDiff == -2){
-            p->setEnPassant(true);
+            dynamic_cast<Pawn *>(p)->setEnPassant(true);
+            cout << "set enPassant to true for just moved pawn" << endl;
         }
-    } */
-
+    }
+    //pawn promotion
     if(p->getPieceSymbol() == 'P' && (move.getEndPos().first == 0 || move.getEndPos().first == 7)){
-        //pawn promotion
         char newPiece;
         cout << "Enter the piece you want to promote to (Q, R, B, N): ";
         while(cin >> newPiece){
