@@ -16,18 +16,18 @@ Move Person::parseMoveInput() {
     int row1, row2, col1, col2;
     cin >> start >> end;
     //getBoard()->printCLI(); 
-    row1 = start[0] - 'a'; 
-    col1 = start[1] - '1';
-    row2 = end[0] - 'a';
-    col2 = end[1] - '1';
+    col1 = start[0] - 'a'; 
+    row1 = start[1] - '1';
+    col2 = end[0] - 'a';
+    row2 = end[1] - '1';
 
     if (!(row1 >= 0 && row1 < 8)) throw invalid_argument("received invalid input");
     if (!(col1 >= 0 && col1 < 8)) throw invalid_argument("received invalid input");
     if (!(row2 >= 0 && row2 < 8)) throw invalid_argument("received invalid input");
     if (!(col2 >= 0 && col2 < 8)) throw invalid_argument("received invalid input");
 
-    pair<int,int> starting = make_pair(col1, row1);
-    pair<int,int> ending = make_pair(col2, row2); 
+    pair<int,int> starting = make_pair(row1, col1);
+    pair<int,int> ending = make_pair(row2, col2); 
     ChessBoard *board = getBoard();
     // checking if there is a piece to move
     if (!board->isOccupied(starting)) {
@@ -44,6 +44,20 @@ Move Person::parseMoveInput() {
             ? board->getPiece(ending) 
             : nullptr};
     
+    //enpassant
+    // if(board->getPiece(starting)->getPieceSymbol()=='P'){ // is moving piece a pawn?
+    //     if(ending.second==2 && board->getPiece(starting)->isWhite()){ // is pawn moving to row 2
+    //         if(board->getPiece(make_pair(playerMove.getEndPos().first,3))!=nullptr){
+    //             if(board->getPiece(make_pair(playerMove.getEndPos().first,3))->getPieceSymbol()=='P'){
+    //                 if(board->getPiece(make_pair(playerMove.getEndPos().first,3))->getEnPassant()){
+    //                     playerMove.setEnPassant(true);
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+
+
     return playerMove;
 }
 
