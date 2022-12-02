@@ -1,5 +1,10 @@
 #include "ChessBoard.h"
 #include "Piece.h"
+#include "Queen.h"
+#include "Rook.h"
+#include "Bishop.h"
+#include "Knight.h"
+#include "Pawn.h"
 #include <iostream>
 #include <utility>
 #include <vector>
@@ -170,7 +175,7 @@ bool ChessBoard::simulateMove(Move move) {
             return false;
         }
     }
-    trySetPiece(move); 
+    trySetPiece(move);
     bool colour = move.getMovedPiece()->isWhite();
     bool ret = true; 
     if (isInCheck(colour)) {
@@ -178,15 +183,66 @@ bool ChessBoard::simulateMove(Move move) {
         throw invalid_argument("Cannot make that move because it would put you in check, or you are already in check!");
         ret = false;
     }
-    
-    resetMove(move); 
+
+    resetMove(move);
     return ret;
 }
 
 void ChessBoard::afterMove(Move move) {
-    move.getMovedPiece()->setMoved(true); 
-    cout << "set true" << endl;
-    //promo? 
+    cout << "After move: " << endl;
+    Piece * p = move.getMovedPiece();
+    p->setMoved(true);
+
+    //if pawn was captured, and it was enpassant, remove it from the board
+    if(move.getIsEP()){
+            pair<int, int> capturedPawnPos = move.getCapturedPiece()->getPosition();
+            setPiece(capturedPawnPos, nullptr); //this leaks memory but works
+            //delete board[capturedPawnPos.first][capturedPawnPos.second]; //this crashes the program
+    }
+    //set all pawns enpassant value to false
+    for(int i = 0; i < 8; i++){
+        for(int j = 0; j < 8; j++){
+            Piece *tmp = getPiece(make_pair(i, j));
+            if(tmp != nullptr && tmp->getPieceSymbol() == 'P'){
+                dynamic_cast<Pawn *>(tmp)->setEnPassant(false);
+            }
+        }
+    }
+    //if pawn was the moved piece, and it just moved two squares, set enpassant to true
+    if(p->getPieceSymbol() == 'P'){
+        int rowDiff = move.getEndPos().first - move.getStartPos().first;
+        pair<int, int> leftOfPos = make_pair(move.getEndPos().first, move.getEndPos().second - 1);
+        pair<int, int> rightOfPos = make_pair(move.getEndPos().first, move.getEndPos().second + 1);
+        Piece *leftOf = getPiece(leftOfPos);
+        Piece *rightOf = getPiece(rightOfPos);
+        if((rowDiff == 2 || rowDiff == -2) && ((leftOf != nullptr && leftOf->getPieceSymbol() == 'P') || (rightOf != nullptr && rightOf->getPieceSymbol() == 'P'))){
+            dynamic_cast<Pawn *>(p)->setEnPassant(true);
+        }
+    }
+    //pawn promotion
+    if(p->getPieceSymbol() == 'P' && (move.getEndPos().first == 0 || move.getEndPos().first == 7)){
+        char newPiece;
+        cout << "Enter the piece you want to promote to (Q, R, B, N): ";
+        while(cin >> newPiece){
+            if(newPiece == 'Q'){
+                board[move.getEndPos().first][move.getEndPos().second] = new Queen(p->isWhite(), move.getEndPos());
+                break;
+            } else if(newPiece == 'R'){
+                board[move.getEndPos().first][move.getEndPos().second] = new Rook(p->isWhite(), move.getEndPos());
+                break;
+            } else if(newPiece == 'B'){
+                board[move.getEndPos().first][move.getEndPos().second] = new Bishop(p->isWhite(), move.getEndPos());
+                break;
+            } else if(newPiece == 'N'){
+                board[move.getEndPos().first][move.getEndPos().second] = new Knight(p->isWhite(), move.getEndPos());
+                break;
+            } else{
+                cout << "Invalid piece. Try again." << endl;
+                continue;
+            }
+        }
+        delete p;
+    }
 }
 
 void ChessBoard::doMove(Move move) { 

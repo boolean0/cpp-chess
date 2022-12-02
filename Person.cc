@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include "Person.h"
 #include "ChessBoard.h"
+#include "Pawn.h"
 
 using namespace std;
 
@@ -55,18 +56,18 @@ Move Person::parseMoveInput() {
     int row1, row2, col1, col2;
     cin >> start >> end;
     //getBoard()->printCLI(); 
-    row1 = start[0] - 'a'; 
-    col1 = start[1] - '1';
-    row2 = end[0] - 'a';
-    col2 = end[1] - '1';
+    col1 = start[0] - 'a'; 
+    row1 = start[1] - '1';
+    col2 = end[0] - 'a';
+    row2 = end[1] - '1';
 
     if (!(row1 >= 0 && row1 < 8)) throw invalid_argument("received invalid input");
     if (!(col1 >= 0 && col1 < 8)) throw invalid_argument("received invalid input");
     if (!(row2 >= 0 && row2 < 8)) throw invalid_argument("received invalid input");
     if (!(col2 >= 0 && col2 < 8)) throw invalid_argument("received invalid input");
 
-    pair<int,int> starting = make_pair(col1, row1);
-    pair<int,int> ending = make_pair(col2, row2); 
+    pair<int,int> starting = make_pair(row1, col1);
+    pair<int,int> ending = make_pair(row2, col2); 
     ChessBoard *board = getBoard();
     // checking if there is a piece to move
     if (!board->isOccupied(starting)) {
@@ -79,7 +80,7 @@ Move Person::parseMoveInput() {
         throw invalid_argument(arg);
     }
 
-    Move playerMove{board->getPiece(starting), ending,
+    Move playerMove{board->getPiece(starting), starting, ending,
         board->getPiece(ending) != nullptr 
             ? board->getPiece(ending) 
             : nullptr};
@@ -89,6 +90,32 @@ Move Person::parseMoveInput() {
         // this is not a comprehensive check, we will still prune the move later in checkmovelegal
         Move ret = castleMoveCreator(playerMove); // will convert move into a castling move if it is castling
         return ret;
+    }
+
+    if(board->getPiece(starting)->getPieceSymbol()=='P'){ // is moving piece a pawn?
+        if(ending.first==5 && board->getPiece(starting)->isWhite()){ // is it a white pawn moving to row 5 ?   
+            if(board->isOccupied(make_pair(4, ending.second)) 
+            && board->getPiece(make_pair(4,ending.second))->getPieceSymbol() == 'P'
+            && !board->getPiece(make_pair(4, ending.second))->isWhite()){ // is there a black pawn in the enpassant square?
+                Pawn *p = dynamic_cast<Pawn*>(board->getPiece(make_pair(4, ending.second)));
+                if(p->getEnPassant()){ // is the black pawn in the enpassant square eligible for enpassant?
+                    Move enPassantMove{board->getPiece(starting), starting, ending, p, false, false, false, '\0', true};
+                    cout << "just made EP move!" << endl;
+                    return enPassantMove;
+                }
+            }
+        } else if(ending.first==2 && !board->getPiece(starting)->isWhite()){ // is it a black pawn moving to row 5 ?   
+            if(board->isOccupied(make_pair(3, ending.second)) 
+            && board->getPiece(make_pair(3,ending.second))->getPieceSymbol() == 'P'
+            && board->getPiece(make_pair(3, ending.second))->isWhite()){ // is there a white pawn in the enpassant square?
+                Pawn *p = dynamic_cast<Pawn*>(board->getPiece(make_pair(3, ending.second)));
+                if(p->getEnPassant()){ // is the white pawn in the enpassant square eligible for enpassant?
+                    Move enPassantMove{board->getPiece(starting), starting, ending, p, false, false, false, '\0', true};
+                    cout << "just made EP move!" << endl;
+                    return enPassantMove;
+                }
+            }
+        }
     }
 
     return playerMove;
