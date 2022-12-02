@@ -12,7 +12,7 @@ TextObserver::~TextObserver() {
 }
 
 void TextObserver::notify() {
-    /**for(int i = 7; i >= 0; --i){ //starts from a8 (0,0)
+    for(int i = 7; i >= 0; --i){ //starts from a8 (0,0)
         for(int j = 0; j < 8; j++){
             if(board->isOccupied(make_pair(i, j))){
                 Piece* piece = board->getPiece(make_pair(i, j));
@@ -32,5 +32,5 @@ void TextObserver::notify() {
             }
         }
         cout << endl;
-    }**/
+    }
 }

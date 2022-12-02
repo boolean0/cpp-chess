@@ -43,8 +43,8 @@ void GraphicsObserver::notify() {
     */
    
     //window->f();
-    for(int i = 7; i >= 0; --i){ //starts from a8 (0,0)
-        for(int j = 0; j < 8; j++){
+    for(int j = 0; j < 8; j++){
+        for(int i = 7; i >= 0; --i){ //starts from a8 (0,0)
             int xCor = 100*(j);
             int yCor = 100*(7-i);
             
