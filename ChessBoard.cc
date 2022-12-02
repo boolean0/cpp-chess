@@ -208,7 +208,11 @@ void ChessBoard::afterMove(Move move) {
     //if pawn was the moved piece, and it just moved two squares, set enpassant to true
     if(p->getPieceSymbol() == 'P'){
         int rowDiff = move.getEndPos().first - move.getStartPos().first;
-        if(rowDiff == 2 || rowDiff == -2){
+        pair<int, int> leftOfPos = make_pair(move.getEndPos().first, move.getEndPos().second - 1);
+        pair<int, int> rightOfPos = make_pair(move.getEndPos().first, move.getEndPos().second + 1);
+        Piece *leftOf = getPiece(leftOfPos);
+        Piece *rightOf = getPiece(rightOfPos);
+        if((rowDiff == 2 || rowDiff == -2) && ((leftOf != nullptr && leftOf->getPieceSymbol() == 'P') || (rightOf != nullptr && rightOf->getPieceSymbol() == 'P'))){
             dynamic_cast<Pawn *>(p)->setEnPassant(true);
         }
     }
