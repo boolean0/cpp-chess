@@ -301,6 +301,7 @@ void Game::startGame() {
                 if (board->checkMoveLegal(curMove)) {
                     board->doMove(curMove);
                     board->printCLI();
+
                     //checking checkmate & stalemate
                     Player * opp = players[!turn];
                     if(board->isInCheck(opp->getColor())){
@@ -315,6 +316,7 @@ void Game::startGame() {
                         cout << "STALEMATE!" << endl;
                         reset();
                     }
+                    
                     turn = !turn; // only when a valid move is played do we switch turns
                }
             }

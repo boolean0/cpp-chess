@@ -47,3 +47,7 @@ pair<int, int> Move::getEndPos(){
 Piece* Move::getCapturedPiece(){
     return capturedPiece;
 }
+
+bool Move::isPotentialKSCastle() { return isCastleK; }
+
+bool Move::isPotentialQSCastle() { return isCastleQ; }

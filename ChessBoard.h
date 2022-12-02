@@ -12,7 +12,8 @@ class ChessBoard : public Subject {
         void resetMove(Move move);
         bool isPotentialMove(Move move); 
         void afterMove(Move move); 
-
+        bool checkLegalCastle(Move move, bool isKSCastle);
+        Move castlingKingMoveFactory(Move kingMove, pair<int, int> ending, bool isKSCastle);
     public:
         ~ChessBoard();
         void init(); 
