@@ -49,3 +49,7 @@ pair<int, int> Move::getEndPos(){
 Piece* Move::getCapturedPiece(){
     return capturedPiece;
 }
+
+bool Move::getIsEP(){
+    return isEP;
+}

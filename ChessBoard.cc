@@ -189,12 +189,10 @@ void ChessBoard::afterMove(Move move) {
     p->setMoved(true);
 
     //if pawn was captured, and it was enpassant, remove it from the board
-    if(move.getCapturedPiece() != nullptr && move.getCapturedPiece()->getPieceSymbol() == 'P'){
-        if(dynamic_cast<Pawn *>(move.getCapturedPiece())->getEnPassant()){
+    if(move.getIsEP()){
             pair<int, int> capturedPawnPos = move.getCapturedPiece()->getPosition();
             setPiece(capturedPawnPos, nullptr); //this leaks memory but works
             //delete board[capturedPawnPos.first][capturedPawnPos.second]; //this crashes the program
-        }
     }
     //set all pawns enpassant value to false
     for(int i = 0; i < 8; i++){
