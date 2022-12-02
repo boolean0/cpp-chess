@@ -355,11 +355,9 @@ bool ChessBoard::checkLegalCastle(Move move, bool isKSCastle) {
 
 bool ChessBoard::checkMoveLegal(Move move) {
     if (move.isPotentialKSCastle() && isPotentialMove(move)) {
-        cout << "bruh" << endl;
         return checkLegalCastle(move, true);
     }
     else if (move.isPotentialQSCastle() && isPotentialMove(move)) {
-        cout << "BRuh" << endl;
         return checkLegalCastle(move, false);
     }
 
