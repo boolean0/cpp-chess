@@ -180,7 +180,8 @@ void Game::startGame() {
         
         if (input == "print") {
             //delete later, for testing
-            board->printCLI();
+            //board->printCLI();
+            board->notifyObservers();
         }
         
         else if (input == "game") {
@@ -224,7 +225,7 @@ void Game::startGame() {
                         continue;
                     }
 
-                    board->printCLI();
+                    board->notifyObservers();
                 }
                 else if (s == "-") {
                     char piece;
@@ -240,7 +241,7 @@ void Game::startGame() {
                     }
            
                     board->setPiece(make_pair(row, col),nullptr);
-                    board->printCLI();
+                    board->notifyObservers();
                 } 
                 else if (s == "=") {
                     string color;
@@ -286,7 +287,7 @@ void Game::startGame() {
                     for(int i = 0; i < 8; i++){
                         addPiece('p', make_pair(6, i));
                     }
-                    board->printCLI();
+                    board->notifyObservers();
                 }
             }
 
@@ -300,7 +301,7 @@ void Game::startGame() {
                 Move curMove = cur->handleMove(); // can throw invalid arg
                 if (board->checkMoveLegal(curMove)) {
                     board->doMove(curMove);
-                    board->printCLI();
+                    board->notifyObservers();
                     //checking checkmate & stalemate
                     Player * opp = players[!turn];
                     if(board->isInCheck(opp->getColor())){
