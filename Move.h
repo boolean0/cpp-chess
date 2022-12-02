@@ -26,6 +26,7 @@ class Move {
     pair<int, int> getStartPos(); 
     pair<int, int> getEndPos(); 
     Piece* getCapturedPiece(); 
+    bool getIsEP();
     
 };
 
