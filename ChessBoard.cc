@@ -170,7 +170,7 @@ bool ChessBoard::simulateMove(Move move) {
             return false;
         }
     }
-    trySetPiece(move); 
+    trySetPiece(move);
     bool colour = move.getMovedPiece()->isWhite();
     bool ret = true; 
     if (isInCheck(colour)) {
@@ -178,8 +178,8 @@ bool ChessBoard::simulateMove(Move move) {
         throw invalid_argument("Cannot make that move because it would put you in check, or you are already in check!");
         ret = false;
     }
-    
-    resetMove(move); 
+
+    resetMove(move);
     return ret;
 }
 
@@ -190,12 +190,10 @@ void ChessBoard::afterMove(Move move) {
 
     //if pawn was captured, and it was enpassant, remove it from the board
     if(move.getCapturedPiece() != nullptr && move.getCapturedPiece()->getPieceSymbol() == 'P'){
-        cout << "pawn was captured" << endl;
         if(dynamic_cast<Pawn *>(move.getCapturedPiece())->getEnPassant()){
-            cout << "via enpassant" << endl;
             pair<int, int> capturedPawnPos = move.getCapturedPiece()->getPosition();
-            board[capturedPawnPos.first][capturedPawnPos.second] = nullptr;
-            delete move.getCapturedPiece();
+            setPiece(capturedPawnPos, nullptr); //this leaks memory but works
+            //delete board[capturedPawnPos.first][capturedPawnPos.second]; //this crashes the program
         }
     }
     //set all pawns enpassant value to false
@@ -212,7 +210,6 @@ void ChessBoard::afterMove(Move move) {
         int rowDiff = move.getEndPos().first - move.getStartPos().first;
         if(rowDiff == 2 || rowDiff == -2){
             dynamic_cast<Pawn *>(p)->setEnPassant(true);
-            cout << "set enPassant to true for just moved pawn" << endl;
         }
     }
     //pawn promotion

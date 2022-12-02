@@ -306,12 +306,14 @@ void Game::startGame() {
                     if(board->isInCheck(opp->getColor())){
                         opp->setInCheck(true);
                     }
+                    //ERROR HAPPENING HERE:
                     if(opp->isCheckmate()){
                         cout << "CHECKMATE!" << endl;
                         if(opp->getColor() == 1) pbScore++;
                         else pwScore++;
                         reset();
-                    } else if(opp->isStalemate()){
+                    } 
+                    if(opp->isStalemate()){
                         cout << "STALEMATE!" << endl;
                         reset();
                     }
