@@ -192,10 +192,6 @@ void ChessBoard::doMove(Move move) {
     // THIS ASSUMES THE MOVE IS VALID AND LEGAL
     // ONLY CALL AFTER ALL CHECKS ON MOVES HAVE BEEN DONE!
 
-    // if (move.isPotentialKSCastle() && ...) {
-    //     //we know the castle is valid
-    // }
-
     setPiece(move.getEndPos(), move.getMovedPiece());
     cout << "Moved " << move.getMovedPiece()->getPieceSymbol() << " from (" <<
                 move.getStartPos().first << ", " << move.getStartPos().second
@@ -205,6 +201,35 @@ void ChessBoard::doMove(Move move) {
     move.getMovedPiece()->setPosition(move.getEndPos());
 
     afterMove(move);
+
+    // if it is castling, we also need to move the rook, just do it here lol
+    // we know the castle is valid
+    bool pieceColour = move.getCapturedPiece()->isWhite();
+    if (move.isPotentialKSCastle() && pieceColour) {
+        cout << "here" << endl;
+        pair<int, int> h1 = make_pair(0, 7);
+        pair<int, int> f1 = make_pair(0, 5);
+        Move Rf1{getPiece(h1), f1, nullptr}; 
+        doMove(Rf1);
+    }
+    else if (move.isPotentialQSCastle() && pieceColour) {
+        pair<int, int> a1 = make_pair(0, 0);
+        pair<int, int> d1 = make_pair(0, 3);
+        Move Rd1{getPiece(a1), d1, nullptr};
+        doMove(Rd1);
+    }
+    else if (move.isPotentialKSCastle() && !pieceColour) {
+        pair<int, int> h8 = make_pair(7, 7);
+        pair<int, int> f8 = make_pair(7, 5); 
+        Move Rf8{getPiece(h8), f8, nullptr};
+        doMove(Rf8);
+    }
+    else if (move.isPotentialQSCastle() && !pieceColour) {
+        pair<int, int> a8 = make_pair(7, 0); 
+        pair<int, int> d8 = make_pair(7, 3); 
+        Move Rd8{getPiece(a8), d8, nullptr};
+        doMove(Rd8);
+    }
 }
 
 
