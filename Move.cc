@@ -50,6 +50,11 @@ Piece* Move::getCapturedPiece(){
     return capturedPiece;
 }
 
+
+bool Move::isPotentialKSCastle() { return isCastleK; }
+
+bool Move::isPotentialQSCastle() { return isCastleQ; }
+
 bool Move::getIsEP(){
     return isEP;
 }

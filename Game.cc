@@ -318,6 +318,7 @@ void Game::startGame() {
                         cout << "STALEMATE!" << endl;
                         reset();
                     }
+                    
                     turn = !turn; // only when a valid move is played do we switch turns
                }
             }

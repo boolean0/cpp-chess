@@ -26,6 +26,8 @@ class Move {
     pair<int, int> getStartPos(); 
     pair<int, int> getEndPos(); 
     Piece* getCapturedPiece(); 
+    bool isPotentialKSCastle();
+    bool isPotentialQSCastle();
     bool getIsEP();
     
 };
