@@ -32,15 +32,19 @@ bool Player::getHasCastled() {
 
 bool Player::isCheckmate() { 
     if(getInCheck()){
+        
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
                 Piece *p = board->getPiece({i,j});
                 if(board->isOccupied({i, j}) && p->isWhite() == color){
                     //check all pieces of same color as player for valid moves, if exists, return false. Else, return true.
-                    vector<Move> ml = p->generateMoves();
+                    vector<Move> ml = p->generateMoves(); //these moves do not pass in captured pieces
                     for(Move m : ml){
+                        if(board->isOccupied(m.getEndPos())){
+                            m = {p, m.getStartPos(), m.getEndPos(), board->getPiece(m.getEndPos())};
+                        }
                         try{
-                            if(board->checkMoveLegal(m)){
+                            if(board->checkMoveLegal(m)){ //ERROR HERE
                                 return false;
                             }
                         } catch(std::invalid_argument &err){

@@ -12,14 +12,14 @@ vector<Move> Knight::generateMoves(){
     vector<Move> rawList = {};
     int row = position.first;
     int col = position.second;
-    rawList.push_back(Move{this, make_pair(row+2, col+1)});
-    rawList.push_back(Move{this, make_pair(row+2, col-1)});
-    rawList.push_back(Move{this, make_pair(row-2, col+1)});
-    rawList.push_back(Move{this, make_pair(row-2, col-1)});
-    rawList.push_back(Move{this, make_pair(row+1, col+2)});
-    rawList.push_back(Move{this, make_pair(row+1, col-2)});
-    rawList.push_back(Move{this, make_pair(row-1, col+2)});
-    rawList.push_back(Move{this, make_pair(row-1, col-2)});
+    rawList.push_back(Move{this, position, make_pair(row+2, col+1)});
+    rawList.push_back(Move{this, position, make_pair(row+2, col-1)});
+    rawList.push_back(Move{this, position, make_pair(row-2, col+1)});
+    rawList.push_back(Move{this, position, make_pair(row-2, col-1)});
+    rawList.push_back(Move{this, position, make_pair(row+1, col+2)});
+    rawList.push_back(Move{this, position, make_pair(row+1, col-2)});
+    rawList.push_back(Move{this, position, make_pair(row-1, col+2)});
+    rawList.push_back(Move{this, position, make_pair(row-1, col-2)});
 
     vector<Move> moveList = {};
     for(Move move : rawList){
