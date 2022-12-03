@@ -60,19 +60,19 @@ void Game::reset() {
 
 void assignPlayers(string player, int idx, Player** players, ChessBoard * board) {
             if (player == "human") {
-                players[idx] = new Person{idx, false, false, false, board};
+                players[idx] = new Person{(bool)idx, false, false, false, board};
             } 
             else if (player == "computer1") {
-                players[idx] = new AILvl1{idx, false, false, true, board};
+                players[idx] = new AILvl1{(bool)idx, false, false, true, board};
             }   
             else if (player == "computer2") {
-                players[idx] = new AILvl2{idx, false, false, true, board};
+                players[idx] = new AILvl2{(bool)idx, false, false, true, board};
             }
             else if (player == "computer3") {
-                players[idx] = new AILvl3{idx, false, false, true, board};
+                players[idx] = new AILvl3{(bool)idx, false, false, true, board};
             }
             else if (player == "computer4") {
-                players[idx] = new AILvl4{idx, false, false, true, board};
+                players[idx] = new AILvl4{(bool)idx, false, false, true, board};
             }
             else {
                 string colour = idx == 1 ? "White" : "Black";
