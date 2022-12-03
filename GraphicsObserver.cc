@@ -12,7 +12,7 @@ GraphicsObserver::GraphicsObserver(ChessBoard *board): board{board} {
     board->attach(this);
 
     #if VIEW >= 1 
-        window = new Xwindow(800,800);
+        window = new Xwindow(900,900);
     #endif
 }
 
@@ -43,12 +43,12 @@ void GraphicsObserver::notify() {
     */
    
     //window->f();
-    for(int j = 0; j < 8; j++){
-        for(int i = 7; i >= 0; --i){ //starts from a8 (0,0)
-            int xCor = 100*(j);
-            int yCor = 100*(7-i);
+    for(int i = 7; i >= 0; --i){ //starts from a8 (0,0)
+        for(int j = 0; j < 8; j++){
+            int xCor = 50+100*(j);
+            int yCor = 50+100*(7-i);
             
-            bool isWhiteSquare = ((i+j)%2 == 0);
+            bool isWhiteSquare = ((i+j)%2 == 1);
 
             if(board->isOccupied(make_pair(i, j))) {
                 Piece* piece = board->getPiece(make_pair(i, j));   
@@ -56,8 +56,8 @@ void GraphicsObserver::notify() {
                 char p = piece->getPieceSymbol();
                 window->drawPiece(p, isWhitePiece, isWhiteSquare, xCor, yCor);
             } else {
-                if (isWhiteSquare) window->fillRectangle(xCor,yCor,100,100,window->White);
-                else window->fillRectangle(xCor,yCor,100,100,window->Black);
+                if (isWhiteSquare) window->fillRectangleCustom(xCor,yCor,100,100,3);
+                else window->fillRectangleCustom(xCor,yCor,100,100,2);
             }
         }
     }
