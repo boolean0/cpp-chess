@@ -2767,9 +2767,13 @@ Xwindow::Xwindow(int width, int height) {
 
   customColours[0] = 15658706;
   customColours[1] = 7771734;
+  customColours[2] = 3883602; //dark
+  customColours[3] = 15067632; //light
+  customColours[4] = 8495553; //medium
+  
 
-  XSetBackground(d, gc, WhitePixel(d, DefaultScreen(d)));
-  XSetForeground(d,gc,colours[Black]);
+  //XSetBackground(d, gc, WhitePixel(d, DefaultScreen(d)));
+  XSetBackground(d, gc, customColours[3]);
 
   // Make window non-resizeable.
   XSizeHints hints;
@@ -2782,6 +2786,18 @@ Xwindow::Xwindow(int width, int height) {
 
   usleep(1000);
 
+  fillRectangleCustom(0,0,height,width,4);
+
+  drawString(432, 33, "CHESS!");
+  for (int i = 7; i >= 0; --i) {
+    drawString(22,107 + i*100, std::to_string(8-i));
+  }
+
+  for (int i = 0; i <= 7; ++i) {
+    string s{(char)('a'+i)};
+    drawString(97 + i*100, 875, s);
+  }
+  
   // Make sure we don't race against the Window being shown
   XEvent ev;
   while(1) {
@@ -2801,13 +2817,13 @@ Xwindow::~Xwindow() {
 void Xwindow::fillRectangle(int x, int y, int width, int height, int colour) {
   XSetForeground(d, gc, colours[colour]);
   XFillRectangle(d, w, gc, x, y, width, height);
-  XSetForeground(d, gc, colours[Black]);
+  XSetForeground(d, gc, customColours[2]);
 }
 
 void Xwindow::fillRectangleCustom(int x, int y, int width, int height, int colour) {
   XSetForeground(d, gc, customColours[colour]);
   XFillRectangle(d, w, gc, x, y, width, height);
-  XSetForeground(d, gc, colours[Black]);
+  XSetForeground(d, gc, customColours[2]);
 }
 
 void Xwindow::drawString(int x, int y, string msg) {
