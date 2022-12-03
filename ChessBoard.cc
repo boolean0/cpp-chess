@@ -267,25 +267,25 @@ void ChessBoard::doMove(Move move) {
         cout << "here" << endl;
         pair<int, int> h1 = make_pair(0, 7);
         pair<int, int> f1 = make_pair(0, 5);
-        Move Rf1{getPiece(h1), f1, nullptr}; 
+        Move Rf1{getPiece(h1), h1, f1, nullptr}; 
         doMove(Rf1);
     }
     else if (move.isPotentialQSCastle() && pieceColour) {
         pair<int, int> a1 = make_pair(0, 0);
         pair<int, int> d1 = make_pair(0, 3);
-        Move Rd1{getPiece(a1), d1, nullptr};
+        Move Rd1{getPiece(a1), a1, d1, nullptr};
         doMove(Rd1);
     }
     else if (move.isPotentialKSCastle() && !pieceColour) {
         pair<int, int> h8 = make_pair(7, 7);
         pair<int, int> f8 = make_pair(7, 5); 
-        Move Rf8{getPiece(h8), f8, nullptr};
+        Move Rf8{getPiece(h8), h8, f8, nullptr};
         doMove(Rf8);
     }
     else if (move.isPotentialQSCastle() && !pieceColour) {
         pair<int, int> a8 = make_pair(7, 0); 
         pair<int, int> d8 = make_pair(7, 3); 
-        Move Rd8{getPiece(a8), d8, nullptr};
+        Move Rd8{getPiece(a8), a8, d8, nullptr};
         doMove(Rd8);
     }
 }
@@ -323,7 +323,7 @@ bool ChessBoard::isPotentialMove(Move move) {
 
 Move ChessBoard::castlingKingMoveFactory(Move kingMove, pair<int, int> ending, bool isKSCastle) {
     // creates king moves for castle checking
-    Move m{kingMove.getMovedPiece(), ending,
+    Move m{kingMove.getMovedPiece(), kingMove.getStartPos(), ending,
      isOccupied(ending) ? getPiece(ending) : nullptr, 
      isKSCastle ? true : false, 
      isKSCastle ? false : true, //queenside opposite of kingside
@@ -346,7 +346,6 @@ bool ChessBoard::checkLegalCastle(Move move, bool isKSCastle) {
     if (!clear) return false;
 
     bool colour = move.getMovedPiece()->isWhite();
-
     if (isInCheck(colour)) return false; // cannot castle out of check, setup exception?
 
     bool intermediateSquaresClear = false;
@@ -374,7 +373,7 @@ bool ChessBoard::checkLegalCastle(Move move, bool isKSCastle) {
 
         Move Kd1 = castlingKingMoveFactory(move, make_pair(0, 3), isKSCastle);
         Move Kc1 = castlingKingMoveFactory(move, make_pair(0, 2), isKSCastle);
-        Move Rad1{getPiece(a1), make_pair(0, 3), getPiece(make_pair(0, 3)) != nullptr ? getPiece(make_pair(0, 3)) : nullptr};
+        Move Rad1{getPiece(a1), a1, make_pair(0, 3), getPiece(make_pair(0, 3)) != nullptr ? getPiece(make_pair(0, 3)) : nullptr};
 
         intermediateSquaresClear = isPathClear(Kd1) && isPathClear(Kc1) && isPathClear(Rad1); // checks if there is a piece on b1
         notInCheckDuringCastle = simulateMove(Kd1) && simulateMove(Kc1); 
@@ -401,7 +400,7 @@ bool ChessBoard::checkLegalCastle(Move move, bool isKSCastle) {
 
         Move d8 = castlingKingMoveFactory(move, make_pair(7, 3), isKSCastle);
         Move c8 = castlingKingMoveFactory(move, make_pair(7, 2), isKSCastle);
-        Move Rad8{getPiece(a8), make_pair(7, 3), getPiece(make_pair(7, 3)) != nullptr ? getPiece(make_pair(7, 3)) : nullptr};
+        Move Rad8{getPiece(a8), a8, make_pair(7, 3), getPiece(make_pair(7, 3)) != nullptr ? getPiece(make_pair(7, 3)) : nullptr};
 
         intermediateSquaresClear = isPathClear(d8) && isPathClear(c8) && isPathClear(Rad8); // checks if there ia piece on b8
         notInCheckDuringCastle = simulateMove(d8) && simulateMove(c8); 

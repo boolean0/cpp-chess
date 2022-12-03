@@ -32,14 +32,14 @@ Move Person::castleMoveCreator(Move move) {
 
 
     if (type == 1) { // ks castle
-        Move m{board->getPiece(move.getStartPos()), move.getEndPos(),
+        Move m{board->getPiece(move.getStartPos()), move.getStartPos(), move.getEndPos(),
                 board->getPiece(move.getEndPos()) != nullptr 
                 ? board->getPiece(move.getEndPos()) 
                 : nullptr, true, false, false, ' ', false};
         return m;
     }
     else if (type == 2) { // qs castle
-        Move m{board->getPiece(move.getStartPos()), move.getEndPos(),
+        Move m{board->getPiece(move.getStartPos()), move.getStartPos(), move.getEndPos(),
                 board->getPiece(move.getEndPos()) != nullptr 
                 ? board->getPiece(move.getEndPos()) 
                 : nullptr, false, true, false, ' ', false};
