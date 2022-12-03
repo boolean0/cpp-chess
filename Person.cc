@@ -11,45 +11,6 @@ using namespace std;
 Person::Person(bool color, bool inCheck, bool hasCastled, bool isComputer, ChessBoard *board):
     Player{color, inCheck, hasCastled, isComputer, board} {}
 
-
-Move Person::castleMoveCreator(Move move) {
-    // 0 is no castle, 1 is KS, 2 is QS
-    ChessBoard *board = getBoard();
-    int type = 0;
-    if (getColor() == 1) { //e1 g1 OR e1 c1
-        if (move.getStartPos() == make_pair(0, 4)) {
-            if(move.getEndPos() == make_pair(0, 6)) type = 1;  // todo make into enum
-            else if (move.getEndPos() == make_pair(0, 2)) type = 2;
-        }        
-    }
-    else { // black castling; e8 g8 OR e8 c8
-        if (move.getStartPos() == make_pair(7, 4)) {
-            if(move.getEndPos() == make_pair(7, 6)) type = 1;  
-            else if (move.getEndPos() == make_pair(7, 2)) type = 2;
-        } 
-    }
-
-
-
-    if (type == 1) { // ks castle
-        Move m{board->getPiece(move.getStartPos()), move.getStartPos(), move.getEndPos(),
-                board->getPiece(move.getEndPos()) != nullptr 
-                ? board->getPiece(move.getEndPos()) 
-                : nullptr, true, false, false, ' ', false};
-        return m;
-    }
-    else if (type == 2) { // qs castle
-        Move m{board->getPiece(move.getStartPos()), move.getStartPos(), move.getEndPos(),
-                board->getPiece(move.getEndPos()) != nullptr 
-                ? board->getPiece(move.getEndPos()) 
-                : nullptr, false, true, false, ' ', false};
-        return m;
-    }
-    else { // no castle
-        return move; 
-    }
-}
-
 Move Person::parseMoveInput() { 
     // TODO: CHECK FOR PAWN PROMOTION, CASTLING!
     string start,end;

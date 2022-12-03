@@ -50,5 +50,12 @@ Strategies!!!
     Pawn:
         added enPassant field, setEnPassant(), getEnPassant()
 
+12-03: 
+    AI: 
+        added random number function randNumBetween() and getAllLegalMoves() function
+    Person/Player: 
+        moved castleMoveCreator from private in Person to protected in Player so that AI can access it 
+
+
 
 

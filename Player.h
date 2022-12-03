@@ -5,6 +5,8 @@
 #include "ChessBoard.h"
 
 class Player { 
+    protected: 
+        Move castleMoveCreator(Move move);
     private:
         bool color;
         bool inCheck;
