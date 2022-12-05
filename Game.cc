@@ -230,9 +230,8 @@ void Game::startGame() {
                     board->notifyObservers();
                 }
                 else if (s == "-") {
-                    char piece;
                     string pos; 
-                    cin >> piece >> pos;
+                    cin >> pos;
                     int col = pos[0] - 'a';
                     int row = pos[1] - '1';
                     

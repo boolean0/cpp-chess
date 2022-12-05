@@ -27,6 +27,7 @@ class ChessBoard : public Subject {
         bool checkMoveLegal(Move move);
         void printCLI();
         void doMove(Move move);
+        bool isCheckMove(Move move);
 };
 
 #endif

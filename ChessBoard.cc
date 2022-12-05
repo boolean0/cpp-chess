@@ -182,6 +182,7 @@ bool ChessBoard::simulateMove(Move move) {
         resetMove(move);
         throw invalid_argument("Cannot make that move because it would put you in check, or you are already in check!");
         ret = false;
+        //return ret;
     }
 
     resetMove(move);
@@ -339,7 +340,7 @@ bool ChessBoard::checkLegalCastle(Move move, bool isKSCastle) {
         // this will return false if there is a opp coloured piece on the square king will land on during castling
     }
     catch (invalid_argument& err) {
-        cerr << err.what() << endl;
+        //cerr << err.what() << endl;
     }
     if (!clear) return false;
 
@@ -416,3 +417,23 @@ bool ChessBoard::checkMoveLegal(Move move) {
 
     return isPotentialMove(move) && isPathClear(move) && simulateMove(move);
 }
+
+bool ChessBoard::isCheckMove(Move move) {
+    // checks if the move made will place the OTHER player in check
+    // MUST ensure that resetmove is called even if this func throws
+    bool colour = move.getMovedPiece()->isWhite();
+    try {
+        trySetPiece(move);
+        if (isInCheck(!colour)) {
+            // other king in check, return true
+            return true;
+        }
+    }
+    catch (invalid_argument& err) {
+        resetMove(move);
+        return false;
+    }
+    resetMove(move);
+    return false;
+}
+

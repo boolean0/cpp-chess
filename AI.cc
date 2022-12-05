@@ -5,6 +5,7 @@
 #include <utility>
 #include <stdexcept>
 #include <exception> 
+#include <iostream>
 AI::AI(bool color, bool inCheck, bool hasCastled, bool isComputer, ChessBoard *board):
     Player{color, inCheck, hasCastled, isComputer, board} {}
 
@@ -32,12 +33,11 @@ vector<Move> AI::getAllLegalMoves() {
                 Piece * p = board->getPiece(pos);
                 vector<Move> moves = p->generateMoves();
                 for(int i = 0; i < (int)moves.size(); i++){
-                    Move m = moves[i];
-                    if(board->isOccupied(m.getEndPos())){
-                        moves[i] = {p, m.getStartPos(), m.getEndPos(), board->getPiece(m.getEndPos())};
+                    if(board->isOccupied(moves[i].getEndPos())){
+                        moves[i] = {p, moves[i].getStartPos(), moves[i].getEndPos(), board->getPiece(moves[i].getEndPos())};
                     }
                     else if (p->getPieceSymbol() == 'K' && !p->hasMoved()) {
-                        moves[i] = castleMoveCreator(m);
+                        moves[i] = castleMoveCreator(moves[i]);
                     }
                 }
                 allMoves.insert(allMoves.begin(), moves.begin(), moves.end());
@@ -47,9 +47,11 @@ vector<Move> AI::getAllLegalMoves() {
 
     for (int i = 0; i < (int)allMoves.size(); ++i) {
         try {
-            if (board->checkMoveLegal(allMoves[i])) legalMoves.push_back(allMoves[i]);
+           if (board->checkMoveLegal(allMoves[i])) {
+                legalMoves.push_back(allMoves[i]);
+            }
         }
-        catch (invalid_argument& err) {
+        catch (std::invalid_argument& err) {
             continue;
         }
     }
