@@ -31,12 +31,13 @@ vector<Move> AI::getAllLegalMoves() {
             if (board->isOccupied(pos) && board->getPiece(pos)->isWhite() == getColor()) {
                 Piece * p = board->getPiece(pos);
                 vector<Move> moves = p->generateMoves();
-                for(Move m : moves){
+                for(int i = 0; i < moves.size(); i++){
+                    Move m = moves[i];
                     if(board->isOccupied(m.getEndPos())){
-                        m = {p, m.getStartPos(), m.getEndPos(), board->getPiece(m.getEndPos())};
+                        moves[i] = {p, m.getStartPos(), m.getEndPos(), board->getPiece(m.getEndPos())};
                     }
                     else if (p->getPieceSymbol() == 'K' && !p->hasMoved()) {
-                        m = castleMoveCreator(m);
+                        moves[i] = castleMoveCreator(m);
                     }
                 }
                 allMoves.insert(allMoves.begin(), moves.begin(), moves.end());
