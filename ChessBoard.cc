@@ -300,8 +300,43 @@ void ChessBoard::setPiece(pair<int,int> square, Piece* piece) {
 }
 
 bool ChessBoard::checkInDanger(Piece * piece) { // for AI
-    
+    pair<int, int> piecePos = piece->getPosition();
+    for(int i = 0; i < 8; i++){
+        for(int j = 0; j < 8; j++){
+            pair<int, int> curSqr = make_pair(i, j);
+            if(isOccupied(curSqr) && (getPiece(piecePos)->isWhite() != getPiece(curSqr)->isWhite())){
+                vector<Move> ml = getPiece(curSqr)->generateMoves();
+                for(Move m : ml){
+                    try{
+                        if(isPathClear(m) && m.getEndPos() == piecePos) { 
+                            // if they can legally take the piece, it's in danger
+                            cout << piece->getPosition().first << "," << piece->getPosition().second << endl;
+                            return true;
+                        }
+                    } catch(invalid_argument& e){
+                        //do nothing
+                    }
+                }
+            }
+        }
+    }
     return false;
+}
+
+bool ChessBoard::isMovingOutOfDanger(Move move) {
+    trySetPiece(move);
+    bool ret = false; 
+    move.getMovedPiece()->setPosition(move.getEndPos()); // set this because we need to check danger again with updated pos 
+    try {
+        if (!checkInDanger(move.getMovedPiece())) {
+            // if no longer in danger return true
+            ret = true;
+        }
+    }
+    catch (invalid_argument& err) {}
+    resetMove(move); 
+    move.getMovedPiece()->setPosition(move.getStartPos());
+    return ret;
 }
 
 bool ChessBoard::isOccupied(pair<int,int> square) {

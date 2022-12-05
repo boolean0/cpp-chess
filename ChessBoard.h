@@ -28,6 +28,7 @@ class ChessBoard : public Subject {
         void printCLI();
         void doMove(Move move);
         bool isCheckMove(Move move);
+        bool isMovingOutOfDanger(Move move);
 };
 
 #endif
