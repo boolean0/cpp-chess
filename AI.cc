@@ -31,7 +31,7 @@ vector<Move> AI::getAllLegalMoves() {
             if (board->isOccupied(pos) && board->getPiece(pos)->isWhite() == getColor()) {
                 Piece * p = board->getPiece(pos);
                 vector<Move> moves = p->generateMoves();
-                for(int i = 0; i < moves.size(); i++){
+                for(int i = 0; i < (int)moves.size(); i++){
                     Move m = moves[i];
                     if(board->isOccupied(m.getEndPos())){
                         moves[i] = {p, m.getStartPos(), m.getEndPos(), board->getPiece(m.getEndPos())};
