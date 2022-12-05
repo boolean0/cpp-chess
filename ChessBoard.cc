@@ -298,7 +298,8 @@ void ChessBoard::setPiece(pair<int,int> square, Piece* piece) {
     board[square.first][square.second] = piece;
 }
 
-bool ChessBoard::checkInDanger() { // for AI
+bool ChessBoard::checkInDanger(Piece * piece) { // for AI
+    
     return false;
 }
 

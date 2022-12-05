@@ -22,7 +22,7 @@ class ChessBoard : public Subject {
         bool simulateMove(Move move); 
         Piece* getPiece(pair<int, int> square);
         void setPiece(pair<int, int> square, Piece* piece); 
-        bool checkInDanger(); 
+        bool checkInDanger(Piece* piece); 
         bool isOccupied(pair<int, int> square);
         bool checkMoveLegal(Move move);
         void printCLI();
