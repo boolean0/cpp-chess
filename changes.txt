@@ -44,5 +44,18 @@ Strategies!!!
         added aftermove function that sets moved to true (can also handle other aftermoves later like castling or promotion)
         Added checks for pawn moves in simulateMove that prevent moving diagonally if there is no piece to capture
 
+12-01
+    Move: 
+        added startPos field
+    Pawn:
+        added enPassant field, setEnPassant(), getEnPassant()
+
+12-03: 
+    AI: 
+        added random number function randNumBetween() and getAllLegalMoves() function
+    Person/Player: 
+        moved castleMoveCreator from private in Person to protected in Player so that AI can access it 
+
+
 
 

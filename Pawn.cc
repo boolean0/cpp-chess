@@ -13,15 +13,15 @@ vector<Move> Pawn::generateMoves(){
     int row = position.first;
     int col = position.second;
       if (white) {
-        if(row == 1 && !hasMoved()) rawList.push_back(Move{this, make_pair(row + 2, col)}); 
-        rawList.push_back(Move{this, make_pair(row + 1, col)});
-        rawList.push_back(Move{this, make_pair(row + 1, col + 1)});
-        rawList.push_back(Move{this, make_pair(row + 1, col - 1)});
+        if(row == 1 && !hasMoved()) rawList.push_back(Move{this, position, make_pair(row + 2, col)}); 
+        rawList.push_back(Move{this, position, make_pair(row + 1, col)});
+        rawList.push_back(Move{this, position, make_pair(row + 1, col + 1)});
+        rawList.push_back(Move{this, position, make_pair(row + 1, col - 1)});
       } else{
-        if(row == 6 && !hasMoved()) rawList.push_back(Move{this, make_pair(row - 2, col)});
-        rawList.push_back(Move{this, make_pair(row - 1, col)});
-        rawList.push_back(Move{this, make_pair(row - 1, col + 1)});
-        rawList.push_back(Move{this, make_pair(row - 1, col - 1)});
+        if(row == 6 && !hasMoved()) rawList.push_back(Move{this, position, make_pair(row - 2, col)});
+        rawList.push_back(Move{this, position, make_pair(row - 1, col)});
+        rawList.push_back(Move{this, position, make_pair(row - 1, col + 1)});
+        rawList.push_back(Move{this, position, make_pair(row - 1, col - 1)});
      } 
 
     vector<Move> moveList = {};
@@ -33,4 +33,11 @@ vector<Move> Pawn::generateMoves(){
         }
     } 
     return moveList;
+}
+
+void Pawn::setEnPassant(bool enPassant){
+    this->enPassant = enPassant;
+}
+bool Pawn::getEnPassant(){
+    return this->enPassant;
 }

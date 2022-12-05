@@ -10,7 +10,9 @@ class AI: public Player {
     public:
         AI(bool color, bool inCheck, bool hasCastled, bool isComputer, ChessBoard *board);
         ~AI(); 
+        int randNumBetween(int start, int end);
         Move handleMove() override; 
+        vector<Move> getAllLegalMoves();
 };
 
 #endif

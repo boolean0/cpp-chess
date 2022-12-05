@@ -60,19 +60,19 @@ void Game::reset() {
 
 void assignPlayers(string player, int idx, Player** players, ChessBoard * board) {
             if (player == "human") {
-                players[idx] = new Person{idx, false, false, false, board};
+                players[idx] = new Person{(bool)idx, false, false, false, board};
             } 
             else if (player == "computer1") {
-                players[idx] = new AILvl1{idx, false, false, true, board};
+                players[idx] = new AILvl1{(bool)idx, false, false, true, board};
             }   
             else if (player == "computer2") {
-                players[idx] = new AILvl2{idx, false, false, true, board};
+                players[idx] = new AILvl2{(bool)idx, false, false, true, board};
             }
             else if (player == "computer3") {
-                players[idx] = new AILvl3{idx, false, false, true, board};
+                players[idx] = new AILvl3{(bool)idx, false, false, true, board};
             }
             else if (player == "computer4") {
-                players[idx] = new AILvl4{idx, false, false, true, board};
+                players[idx] = new AILvl4{(bool)idx, false, false, true, board};
             }
             else {
                 string colour = idx == 1 ? "White" : "Black";
@@ -180,7 +180,8 @@ void Game::startGame() {
         
         if (input == "print") {
             //delete later, for testing
-            board->printCLI();
+            //board->printCLI();
+            board->notifyObservers();
         }
         
         else if (input == "game") {
@@ -224,7 +225,7 @@ void Game::startGame() {
                         continue;
                     }
 
-                    board->printCLI();
+                    board->notifyObservers();
                 }
                 else if (s == "-") {
                     char piece;
@@ -240,7 +241,7 @@ void Game::startGame() {
                     }
            
                     board->setPiece(make_pair(row, col),nullptr);
-                    board->printCLI();
+                    board->notifyObservers();
                 } 
                 else if (s == "=") {
                     string color;
@@ -286,7 +287,7 @@ void Game::startGame() {
                     for(int i = 0; i < 8; i++){
                         addPiece('p', make_pair(6, i));
                     }
-                    board->printCLI();
+                    board->notifyObservers();
                 }
             }
 
@@ -300,21 +301,24 @@ void Game::startGame() {
                 Move curMove = cur->handleMove(); // can throw invalid arg
                 if (board->checkMoveLegal(curMove)) {
                     board->doMove(curMove);
-                    board->printCLI();
+                    board->notifyObservers();
                     //checking checkmate & stalemate
                     Player * opp = players[!turn];
                     if(board->isInCheck(opp->getColor())){
                         opp->setInCheck(true);
                     }
+                    //ERROR HAPPENING HERE:
                     if(opp->isCheckmate()){
                         cout << "CHECKMATE!" << endl;
                         if(opp->getColor() == 1) pbScore++;
                         else pwScore++;
                         reset();
-                    } else if(opp->isStalemate()){
+                    } 
+                    if(opp->isStalemate()){
                         cout << "STALEMATE!" << endl;
                         reset();
                     }
+                    
                     turn = !turn; // only when a valid move is played do we switch turns
                }
             }
