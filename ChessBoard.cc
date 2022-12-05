@@ -248,7 +248,6 @@ void ChessBoard::afterMove(Move move) {
 void ChessBoard::doMove(Move move) { 
     // THIS ASSUMES THE MOVE IS VALID AND LEGAL
     // ONLY CALL AFTER ALL CHECKS ON MOVES HAVE BEEN DONE!
-    cout << "in" << endl;
     if (move.getMovedPiece() == nullptr ) cout << "null " << endl;
     setPiece(move.getEndPos(), move.getMovedPiece());
     cout << "Moved " << move.getMovedPiece()->getPieceSymbol() << " from (" <<
@@ -257,14 +256,12 @@ void ChessBoard::doMove(Move move) {
                 << "," << move.getEndPos().second << ")" << endl;
     setPiece(move.getStartPos(), nullptr);
     move.getMovedPiece()->setPosition(move.getEndPos());
-    cout << "Got here" << endl;
     afterMove(move);
 
     // if it is castling, we also need to move the rook, just do it here lol
     // we know the castle is valid
     bool pieceColour = move.getMovedPiece()->isWhite();
     if (move.isPotentialKSCastle() && pieceColour) {
-        cout << "here" << endl;
         pair<int, int> h1 = make_pair(0, 7);
         pair<int, int> f1 = make_pair(0, 5);
         Move Rf1{getPiece(h1), h1, f1, nullptr}; 
