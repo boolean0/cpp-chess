@@ -42,7 +42,7 @@ void Game::printScoreBoard() {
 }
 
 void Game::reset() {
-    delete board;
+   // delete board;
     delete players[0];
     delete players[1];
     delete textView;
@@ -170,17 +170,19 @@ bool Game::existsTwoKings(){
         return false;
 }
 
+void printWinner(bool colour) {
+    string winner = colour ? "White" : "Black"; 
+    cout << winner << " won! Use setup and game to start a new game." << endl;
+}
+
 void Game::startGame() {
-    bool isRunning = false;
-    bool isSetup = false; 
+    isRunning = false;
+    isSetup = false; 
     Player *cur = nullptr;
     string input;
     cout << "Starting Chess Environment" << endl;
     while(cin >> input) {
-        
         if (input == "print") {
-            //delete later, for testing
-            //board->printCLI();
             board->notifyObservers();
         }
         
@@ -336,7 +338,9 @@ void Game::startGame() {
             } else { //black resigns
                 pwScore++;
             }
+            printWinner(!cur->getColor());
             reset();
+            continue;
         }
 
 
@@ -349,7 +353,7 @@ void Game::startGame() {
     }
 
     // upon ending loop, 
-    //printScoreBoard();
+    printScoreBoard();
 }
 
 
