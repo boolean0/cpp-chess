@@ -13,6 +13,7 @@ class AI: public Player {
         int randNumBetween(int start, int end);
         Move handleMove() override; 
         vector<Move> getAllLegalMoves();
+        vector<Move> getAllEnemyLegalMoves();
 };
 
 #endif
