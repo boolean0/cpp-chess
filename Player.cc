@@ -105,6 +105,9 @@ bool Player::isStalemate() {
                     //check all pieces of same color as player for valid moves, if exists, return false. Else, return true.
                     vector<Move> ml = p->generateMoves();
                     for(Move m : ml){
+                        if(board->isOccupied(m.getEndPos())){
+                            m = {p, m.getStartPos(), m.getEndPos(), board->getPiece(m.getEndPos())};
+                        }
                         try{
                             if(board->checkMoveLegal(m)){
                                 return false;
