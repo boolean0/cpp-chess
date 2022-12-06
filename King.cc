@@ -6,7 +6,7 @@
 
 using namespace std;
 
-King::King(bool white, pair<int, int> position) : Piece{white, 0, position, 'K'} {}
+King::King(bool white, pair<int, int> position) : Piece{white, 5000, position, 'K'} {}
 
 vector<Move> King::generateMoves(){
     vector<Move> rawList = {};

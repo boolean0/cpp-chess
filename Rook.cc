@@ -6,7 +6,7 @@
 
 using namespace std;
 
-Rook::Rook(bool white, pair<int, int> position) : Piece{white, 5, position, 'R'} {}
+Rook::Rook(bool white, pair<int, int> position) : Piece{white, 50, position, 'R'} {}
 
 vector<Move> Rook::generateMoves(){
     vector<Move> rawList = {};

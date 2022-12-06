@@ -152,6 +152,7 @@ void ChessBoard::trySetPiece(Move move) {
     int colStart = move.getStartPos().second;
     board[rowEnd][colEnd] = move.getMovedPiece();
     board[rowStart][colStart] = nullptr; 
+    move.getMovedPiece()->setPosition(move.getEndPos());
 
 }
 
@@ -162,6 +163,7 @@ void ChessBoard::resetMove(Move move) {
     int colStart = move.getStartPos().second;
     board[rowEnd][colEnd] = move.getCapturedPiece();
     board[rowStart][colStart] = move.getMovedPiece();
+    move.getMovedPiece()->setPosition(move.getStartPos());
 }
 
 bool ChessBoard::simulateMove(Move move) { 
@@ -310,7 +312,6 @@ bool ChessBoard::checkInDanger(Piece * piece) { // for AI
                     try{
                         if(isPathClear(m) && m.getEndPos() == piecePos) { 
                             // if they can legally take the piece, it's in danger
-                            cout << piece->getPosition().first << "," << piece->getPosition().second << endl;
                             return true;
                         }
                     } catch(invalid_argument& e){
@@ -471,4 +472,62 @@ bool ChessBoard::isCheckMove(Move move) {
     resetMove(move);
     return false;
 }
+
+int ChessBoard::getScore(bool white) {
+    int score = 0;
+
+    for(int i = 0; i < 8; i++){
+        for(int j = 0; j < 8; j++){
+            pair<int, int> curSqr = make_pair(i, j);
+            if(isOccupied(curSqr)) {
+                Piece *p = getPiece(curSqr);
+                if (p->isWhite() == white) {
+                    score += p->getPoints();
+                } else {
+                    score -= p->getPoints();
+                }
+            } 
+        }
+    }
+
+    return score;
+}
+
+int ChessBoard::scoredSimulateMove(Move move) {
+    if (move.getMovedPiece()->getPieceSymbol() == 'P') {
+        int colDiff = move.getEndPos().second - move.getStartPos().second;
+        if (colDiff != 0 && move.getCapturedPiece() == nullptr) {
+            throw invalid_argument("Pawn cannot move diagonally if there is no piece to capture!");
+            return false;
+        }
+    }
+
+    trySetPiece(move);
+    bool colour = move.getMovedPiece()->isWhite();
+    int score = getScore(colour);
+
+    // calculate the score of the top most vulnerable pieces after a simulated move
+    // motivation: 2 bishops in danger more bad than 1 rook 
+    // if just one piece in danger, just return score of piece
+    int max1 = 0;
+    int max2 = 0;
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            pair<int, int> curSqr = make_pair(i, j);
+            if (isOccupied(curSqr) && getPiece(curSqr)->isWhite() == move.getMovedPiece()->isWhite()
+            && checkInDanger(getPiece(curSqr))) {
+                int points = getPiece(curSqr)->getPoints();
+                if (points >= max1) {
+                    max2 = max1;
+                    max1 = points;
+                } else if (points > max2) {
+                    max2 = points;
+                }
+            }
+        }
+    }
+
+    resetMove(move);
+    return score - (max1 + max2);
+} 
 

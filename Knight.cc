@@ -6,7 +6,7 @@
 
 using namespace std;
 
-Knight::Knight(bool white, pair<int, int> position) : Piece{white, 3, position, 'N'} {}
+Knight::Knight(bool white, pair<int, int> position) : Piece{white, 30, position, 'N'} {}
 
 vector<Move> Knight::generateMoves(){
     vector<Move> rawList = {};

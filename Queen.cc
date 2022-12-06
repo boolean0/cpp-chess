@@ -6,7 +6,7 @@
 
 using namespace std;
 
-Queen::Queen(bool white, pair<int, int> position) : Piece{white, 9, position, 'Q'} {}
+Queen::Queen(bool white, pair<int, int> position) : Piece{white, 90, position, 'Q'} {}
 
 vector<Move> Queen::generateMoves(){
     vector<Move> rawList = {};

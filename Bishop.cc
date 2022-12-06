@@ -6,7 +6,7 @@
 
 using namespace std;
 
-Bishop::Bishop(bool white, pair<int, int> position) : Piece{white, 3, position, 'B'} {}
+Bishop::Bishop(bool white, pair<int, int> position) : Piece{white, 33, position, 'B'} {}
 
 vector<Move> Bishop::generateMoves(){
     vector<Move> rawList = {};
