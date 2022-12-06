@@ -505,7 +505,7 @@ int ChessBoard::scoredSimulateMove(Move move) {
     trySetPiece(move);
     bool colour = move.getMovedPiece()->isWhite();
     int score = getScore(colour);
-
+    if (move.getCapturedPiece() != nullptr) score += move.getCapturedPiece()->getPoints();
     // calculate the score of the top most vulnerable pieces after a simulated move
     // motivation: 2 bishops in danger more bad than 1 rook 
     // if just one piece in danger, just return score of piece

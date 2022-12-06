@@ -13,16 +13,24 @@ Move AILvl4::generateMove() {
         scoreOfMoves.emplace_back(board->scoredSimulateMove(move));
     }
 
-    int idxMax = 0;
     int max = -10000000;
 
     for (int i = 0; i < (int)scoreOfMoves.size(); ++i) {
         int score = scoreOfMoves[i];
         if (score > max) {
             max = score;
-            idxMax = i;
         }
     }
-    
-    return legalMoves[idxMax];
+
+
+    vector<int> maxMoves;
+    for (int i = 0; i < (int)scoreOfMoves.size(); ++i) {
+        if (scoreOfMoves[i] == max) {
+            maxMoves.emplace_back(i); 
+        }
+    }
+
+    int idx = randNumBetween(0, maxMoves.size() - 1);
+        
+    return legalMoves[idx];
 }
