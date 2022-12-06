@@ -25,8 +25,6 @@ Move AILvl4::generateMove() {
         }
     }
 
-    cout << "MAXSCORE asdlkfj: " << max << endl;
-
     vector<int> maxMoves;
     for (int i = 0; i < (int)scoreOfMoves.size(); ++i) {
         if (scoreOfMoves[i] == max) {
