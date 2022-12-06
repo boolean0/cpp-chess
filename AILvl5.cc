@@ -6,7 +6,7 @@ using namespace std;
 AILvl5::AILvl5(bool color, bool inCheck, bool hasCastled, bool isComputer, ChessBoard *board):
     AI{color,inCheck,hasCastled,isComputer,board} {}
 
-Move AILvl5::generateMove() {
+Move AILvl5::generateMove() {    
     ChessBoard * board = getBoard();
     vector<Move> legalMoves = getAllLegalMoves(); 
     

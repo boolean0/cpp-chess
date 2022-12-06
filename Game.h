@@ -8,6 +8,7 @@
 class Game {
     private:
         Player * players[2];
+        Player * helpers[2];
         int pwScore;
         int pbScore;
         bool turn;

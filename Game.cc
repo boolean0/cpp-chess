@@ -11,6 +11,7 @@
 #include "AILvl3.h"
 #include "AILvl4.h"
 #include "AILvl5.h"
+#include "AILvl6.h"
 #include "King.h"
 #include "Queen.h"
 #include "Rook.h"
@@ -25,6 +26,8 @@ using namespace std;
 Game::Game(): pwScore{0}, pbScore{0}, turn{1}, isRunning{false}, isSetup{false} {
     players[0] = nullptr;
     players[1] = nullptr;
+    helpers[0] = nullptr;
+    helpers[1] = nullptr;
     board = new ChessBoard();   
     textView = new TextObserver{board}; 
     graphicsView = new GraphicsObserver{board};
@@ -46,6 +49,8 @@ void Game::reset() {
    // delete board;
     delete players[0];
     delete players[1];
+    delete helpers[0];
+    delete helpers[1];
     delete textView;
     delete graphicsView;
 
@@ -59,9 +64,10 @@ void Game::reset() {
     turn = 1;
 }
 
-void assignPlayers(string player, int idx, Player** players, ChessBoard * board) {
+void assignPlayers(string player, int idx, Player** players, Player** helpers, ChessBoard * board) {
             if (player == "human") {
                 players[idx] = new Person{(bool)idx, false, false, false, board};
+                helpers[idx] = new AILvl5{(bool)idx, false, false, true, board};
             } 
             else if (player == "computer1") {
                 players[idx] = new AILvl1{(bool)idx, false, false, true, board};
@@ -78,6 +84,9 @@ void assignPlayers(string player, int idx, Player** players, ChessBoard * board)
             else if (player == "computer5") {
                 players[idx] = new AILvl5{(bool)idx, false, false, true, board};
             }
+            /*else if (player == "computer6") {
+                players[idx] = new AILvl6{(bool)idx, false, false, true, board};
+            }*/
             else {
                 string colour = idx == 1 ? "White" : "Black";
                 cerr << "Invalid" << colour << "player." << endl;
@@ -193,8 +202,8 @@ void Game::startGame() {
         else if (input == "game") {
             string pW, pB;
             cin >> pW >> pB;
-            assignPlayers(pW, 1, players, board);
-            assignPlayers(pB, 0, players, board);
+            assignPlayers(pW, 1, players, helpers, board);
+            assignPlayers(pB, 0, players, helpers, board);
             isRunning = true;
         } 
         
@@ -335,6 +344,34 @@ void Game::startGame() {
 
             //TODO: update player states 
 
+        } else if (input == "hint") {
+            if (helpers[turn] == nullptr) {
+                cout << "Hint can only be called by a human!" << endl;
+                continue;
+            }
+
+            cout << "Select level of guidance [0-1]:" << endl;
+            int i = -1;
+            while (i != 0 && i != 1) {
+                cin >> i;
+            }
+            cout << "Thinking really hard..." << endl;
+
+            try {
+                Move hint = helpers[turn]->handleMove();
+                cout << "Move " << hint.getMovedPiece()->getPieceSymbol() << " on " 
+                     << char(hint.getStartPos().second + 'A') << hint.getStartPos().first + 1;
+
+                if (i == 1) {
+                    cout << " to " << char(hint.getEndPos().second + 'A') << hint.getEndPos().first + 1;;
+                } 
+
+                cout << endl;
+
+            } catch (std::invalid_argument& err) {
+                cerr << err.what() << endl;
+            }
+
         } else if (input == "resign") {
             if (cur->getColor() == 1) { //white resigns
                 pbScore++;
@@ -358,5 +395,3 @@ void Game::startGame() {
     // upon ending loop, 
     printScoreBoard();
 }
-
-
