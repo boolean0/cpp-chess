@@ -9,8 +9,8 @@ class Game {
     private:
         Player * players[2];
         Player * helpers[2];
-        int pwScore;
-        int pbScore;
+        float pwScore;
+        float pbScore;
         bool turn;
         ChessBoard *board;
         Observer *textView;
@@ -18,6 +18,8 @@ class Game {
         bool isRunning;
         bool isSetup;
         void printScoreBoard(); 
+        void printWinner(bool colour);
+        void printDraw();
         void reset();
         void addPiece(char piece, pair<int,int> sqr);
         bool existsTwoKings();

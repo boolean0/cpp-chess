@@ -248,6 +248,38 @@ void ChessBoard::afterMove(Move move) {
     }
 }
 
+bool ChessBoard::isInsufficientMaterial(){
+    //checks if there is insufficient material to checkmate
+    int numBishops = 0;
+    int numKnights = 0;
+    int numOthers = 0;
+
+    for(int i = 0; i < 8; i++){
+        for(int j = 0; j < 8; j++){
+            Piece *p = getPiece(make_pair(i, j));
+            if(p != nullptr){
+                if(p->getPieceSymbol() == 'B'){
+                    numBishops++;
+                } else if(p->getPieceSymbol() == 'N'){
+                    numKnights++;
+                } else if(p->getPieceSymbol() != 'K'){
+                    numOthers++;
+                }
+            }
+        }
+    }
+
+    if(numOthers > 0){
+        return false;
+    } else if(numBishops <= 1 && numKnights == 0){
+        return true;
+    } else if(numKnights <= 1 && numBishops == 0){
+        return true;
+    } else{
+        return false;
+    }
+}
+
 void ChessBoard::doMove(Move move) { 
     // THIS ASSUMES THE MOVE IS VALID AND LEGAL
     // ONLY CALL AFTER ALL CHECKS ON MOVES HAVE BEEN DONE!

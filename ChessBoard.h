@@ -29,6 +29,7 @@ class ChessBoard : public Subject {
         void doMove(Move move);
         bool isCheckMove(Move move);
         bool isMovingOutOfDanger(Move move);
+        bool isInsufficientMaterial();
         int getScore(bool white);
         int scoredSimulateMove(Move move);
         void simulateFutureMove(Move move);

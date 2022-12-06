@@ -183,9 +183,13 @@ bool Game::existsTwoKings(){
         return false;
 }
 
-void printWinner(bool colour) {
+void Game::printWinner(bool colour) {
     string winner = colour ? "White" : "Black"; 
     cout << winner << " won! Use setup and game to start a new game." << endl;
+}
+
+void Game::printDraw(){
+    cout << "Draw! Use setup and game to start a new game." << endl;
 }
 
 void Game::startGame() {
@@ -271,11 +275,19 @@ void Game::startGame() {
                     }
                 }
                 else if (s == "done") {
-                    if(existsTwoKings()){
-                        break;
+                    bool validSetup = true;
+                    if (!existsTwoKings()) {
+                        cerr << "Invalid setup: must have two kings" << endl;
+                        validSetup = false;
+                    } else if (board->isInCheck(true) || board->isInCheck(false)) {
+                        cerr << "Invalid setup: cannot start in check" << endl;
+                        validSetup = false;
+                    } else if (board->isInsufficientMaterial()) {
+                        cerr << "Invalid setup: insufficient material" << endl;
+                        validSetup = false;
                     }
-                    else {
-                        cerr << "There must be exactly one king of each colour on the board!" << endl;
+                    if(validSetup){
+                        break;
                     }
                 }
                 else if(s == "default") {
@@ -321,18 +333,30 @@ void Game::startGame() {
                     if(board->isInCheck(opp->getColor())){
                         opp->setInCheck(true);
                     }
-                    //ERROR HAPPENING HERE:
                     if(opp->isCheckmate()){
-                        cout << "CHECKMATE!" << endl;
-                        if(opp->getColor() == 1) pbScore++;
-                        else pwScore++;
+                        cout << "CHECKMATE - ";
+                        if(opp->getColor() == 1) {
+                            
+                            pbScore++;
+                        } 
+                        else{
+                            pwScore++;
+                        }
+                        printWinner(cur->getColor());
                         reset();
-                    } 
-                    else if(opp->isStalemate()){
-                        cout << "STALEMATE!" << endl;
+                    } else if(opp->isStalemate()){
+                        cout << "STALEMATE - ";
+                        printDraw();
+                        pbScore += 0.5;
+                        pwScore += 0.5;
+                        reset();
+                    } else if(board->isInsufficientMaterial()){
+                        cout << "INSUFFICIENT MATERIAL - " << endl;
+                        printDraw();
+                        pbScore += 0.5;
+                        pwScore += 0.5;
                         reset();
                     }
-                    
                     turn = !turn; // only when a valid move is played do we switch turns
                }
             }
