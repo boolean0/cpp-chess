@@ -10,6 +10,7 @@
 #include "AILvl2.h"
 #include "AILvl3.h"
 #include "AILvl4.h"
+#include "AILvl5.h"
 #include "King.h"
 #include "Queen.h"
 #include "Rook.h"
@@ -73,6 +74,9 @@ void assignPlayers(string player, int idx, Player** players, ChessBoard * board)
             }
             else if (player == "computer4") {
                 players[idx] = new AILvl4{(bool)idx, false, false, true, board};
+            }
+            else if (player == "computer5") {
+                players[idx] = new AILvl5{(bool)idx, false, false, true, board};
             }
             else {
                 string colour = idx == 1 ? "White" : "Black";

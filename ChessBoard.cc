@@ -531,3 +531,19 @@ int ChessBoard::scoredSimulateMove(Move move) {
     return score - (max1 + max2);
 } 
 
+void ChessBoard::simulateFutureMove(Move move) {
+    if (move.getMovedPiece()->getPieceSymbol() == 'P') {
+        int colDiff = move.getEndPos().second - move.getStartPos().second;
+        if (colDiff != 0 && move.getCapturedPiece() == nullptr) {
+            throw invalid_argument("Pawn cannot move diagonally if there is no piece to capture!");
+        }
+    }
+
+    trySetPiece(move);
+}
+
+void ChessBoard::resetFutureMove(Move move) {
+    resetMove(move);
+}
+
+

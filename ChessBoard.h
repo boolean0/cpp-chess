@@ -31,6 +31,8 @@ class ChessBoard : public Subject {
         bool isMovingOutOfDanger(Move move);
         int getScore(bool white);
         int scoredSimulateMove(Move move);
+        void simulateFutureMove(Move move);
+        void resetFutureMove(Move move);
 };
 
 #endif
