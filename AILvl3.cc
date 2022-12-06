@@ -17,7 +17,6 @@ Move AILvl3::generateMove() {
             pair<int, int> pos = make_pair(i, j); 
             if (board->isOccupied(pos) && board->getPiece(pos)->isWhite() == getColor()
             && board->checkInDanger(board->getPiece(pos))) {
-                cout << pos.first << "," << pos.second << endl;
                 inDangerPieces.push_back(pos);
             }
         }
@@ -27,7 +26,6 @@ Move AILvl3::generateMove() {
         for (int j = 0; j < (int)inDangerPieces.size(); ++j) {
             if (inDangerPieces[j] == legalMoves[i].getStartPos()) { 
                 // this move could potentially get this piece out of danger
-                cout << "here" << endl;
                 if (board->isMovingOutOfDanger(legalMoves[i])) return legalMoves[i];
             }
         }

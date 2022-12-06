@@ -2841,7 +2841,6 @@ void Xwindow::drawCircle(int row, int col) {
 }
 
 void Xwindow::f() {
-  cout <<"got here"<< endl;
   XCopyPlane(d,WoB.at('K'),w,gc,0,0,100,100,0,0,1);
   XCopyPlane(d,WoW.at('P'),w,gc,0,0,100,100,100,0,1);
   XCopyPlane(d,WoB.at('Q'),w,gc,0,0,100,100,200,0,1);

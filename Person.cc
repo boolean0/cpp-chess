@@ -61,7 +61,6 @@ Move Person::parseMoveInput() {
                 Pawn *p = dynamic_cast<Pawn*>(board->getPiece(make_pair(4, ending.second)));
                 if(p->getEnPassant()){ // is the black pawn in the enpassant square eligible for enpassant?
                     Move enPassantMove{board->getPiece(starting), starting, ending, p, false, false, false, '\0', true};
-                    cout << "just made EP move!" << endl;
                     return enPassantMove;
                 }
             }
@@ -72,7 +71,6 @@ Move Person::parseMoveInput() {
                 Pawn *p = dynamic_cast<Pawn*>(board->getPiece(make_pair(3, ending.second)));
                 if(p->getEnPassant()){ // is the white pawn in the enpassant square eligible for enpassant?
                     Move enPassantMove{board->getPiece(starting), starting, ending, p, false, false, false, '\0', true};
-                    cout << "just made EP move!" << endl;
                     return enPassantMove;
                 }
             }
