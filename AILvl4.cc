@@ -1,4 +1,7 @@
 #include "AILvl4.h"
+#include <iostream>
+
+using namespace std;
 
 AILvl4::AILvl4(bool color, bool inCheck, bool hasCastled, bool isComputer, ChessBoard *board):
     AI{color,inCheck,hasCastled,isComputer,board} {}
@@ -22,6 +25,7 @@ Move AILvl4::generateMove() {
         }
     }
 
+    cout << "MAXSCORE asdlkfj: " << max << endl;
 
     vector<int> maxMoves;
     for (int i = 0; i < (int)scoreOfMoves.size(); ++i) {
@@ -32,5 +36,5 @@ Move AILvl4::generateMove() {
 
     int idx = randNumBetween(0, maxMoves.size() - 1);
         
-    return legalMoves[idx];
+    return legalMoves[maxMoves[idx]];
 }
