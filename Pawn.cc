@@ -6,7 +6,7 @@
 
 using namespace std;
 
-Pawn::Pawn(bool white, pair<int, int> position) : Piece{white, 1, position, 'P'} {}
+Pawn::Pawn(bool white, pair<int, int> position) : Piece{white, 10, position, 'P'} {}
 
 vector<Move> Pawn::generateMoves(){
     vector<Move> rawList = {};
