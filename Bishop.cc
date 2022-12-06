@@ -29,5 +29,3 @@ vector<Move> Bishop::generateMoves(){
     } 
     return moveList;
 }
-
-

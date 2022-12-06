@@ -51,5 +51,3 @@ Move AILvl5::generateMove() {
         
     return legalMoves[minMoves[idx]];
 }
-
-

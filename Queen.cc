@@ -34,5 +34,3 @@ vector<Move> Queen::generateMoves(){
     } 
     return moveList;
 }
-
-

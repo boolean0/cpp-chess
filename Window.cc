@@ -2,6 +2,8 @@
 #define VIEW 0 
 #endif
 
+#if VIEW >= 1
+
 /*
   sprite graphics from "chess.com", 2022 @ chess.com
 */
@@ -2662,7 +2664,7 @@ static unsigned char wn_b_bits[] = {
  0xff,0xff,0xff,0xff};
 
 
-#if VIEW >= 1
+
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <iostream>
@@ -2834,22 +2836,6 @@ void Xwindow::drawString(int x, int y, string msg) {
   XDrawString(d, w, DefaultGC(d, s), x, y, msg.c_str(), msg.length());
 }
 
-void Xwindow::drawCircle(int row, int col) {
-  XSetForeground(d, gc, colours[White]);
-  XFillArc(d, w, gc, 15, 15, 70, 70, 360*64, 360*64);
-  XSetForeground(d, gc, colours[Black]);
-}
-
-void Xwindow::f() {
-  XCopyPlane(d,WoB.at('K'),w,gc,0,0,100,100,0,0,1);
-  XCopyPlane(d,WoW.at('P'),w,gc,0,0,100,100,100,0,1);
-  XCopyPlane(d,WoB.at('Q'),w,gc,0,0,100,100,200,0,1);
-  XCopyPlane(d,WoW.at('N'),w,gc,0,0,100,100,0,100,1);
-  XCopyPlane(d,BoB.at('N'),w,gc,0,0,100,100,100,100,1);
-
-  //XSync(d, False);
-  //sleep(3);
-}
 
 void Xwindow::drawPiece(char p, bool isWhitePiece, bool isWhiteSquare, int x, int y) {
   

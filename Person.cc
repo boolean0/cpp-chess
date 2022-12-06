@@ -83,4 +83,3 @@ Move Person::parseMoveInput() {
 Move Person::handleMove() {
     return parseMoveInput();    
 }
-

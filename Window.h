@@ -38,8 +38,6 @@ class Xwindow {
   void fillRectangleCustom(int x, int y, int width, int height, int colour=0);
   // Draws a string
   void drawString(int x, int y, std::string msg);
-  void drawCircle(int row, int col);
-  void f();
   void drawPiece(char p, bool isWhitePiece, bool isWhiteSquare, int row, int col);
 };
 #endif

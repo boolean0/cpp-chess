@@ -89,7 +89,8 @@ void assignPlayers(string player, int idx, Player** players, Player** helpers, C
             }*/
             else {
                 string colour = idx == 1 ? "White" : "Black";
-                cerr << "Invalid" << colour << "player." << endl;
+                string err = "Invalid " + colour + " player.";
+                throw invalid_argument(err);
             }
 }
 
@@ -158,7 +159,7 @@ void Game::addPiece(char piece, pair<int,int> sqr) {
             break;
         }
         default: {
-            throw "Invalid piece";
+            throw invalid_argument("Invalid piece");
         }
     }
 }
@@ -206,9 +207,16 @@ void Game::startGame() {
         else if (input == "game") {
             string pW, pB;
             cin >> pW >> pB;
-            assignPlayers(pW, 1, players, helpers, board);
-            assignPlayers(pB, 0, players, helpers, board);
-            isRunning = true;
+            try {
+                assignPlayers(pW, 1, players, helpers, board);
+                assignPlayers(pB, 0, players, helpers, board);
+                isRunning = true;
+            } catch (std::invalid_argument& err) {
+                delete players[0];
+                delete players[1];
+                cerr << err.what() << endl;
+            }
+            
         } 
         
         else if (input == "setup") {

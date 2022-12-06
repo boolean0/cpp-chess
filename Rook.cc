@@ -30,4 +30,3 @@ vector<Move> Rook::generateMoves(){
     } 
     return moveList;
 }
-

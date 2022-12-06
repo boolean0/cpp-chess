@@ -58,5 +58,3 @@ Move AILvl6::generateMove() {
         
     return legalMoves[maxMoves[idx]];
 }
-
-
