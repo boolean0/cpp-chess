@@ -12,7 +12,7 @@ class Piece {
         int points;
         pair<int, int> position;
         char pieceSymbol;
-        bool moved;
+        int timesMoved;
     public:
         Piece(bool white, int points, pair<int,int> position, char pieceSymbol);
         virtual vector<Move> generateMoves() = 0;
@@ -23,7 +23,8 @@ class Piece {
         void setPosition(pair<int, int> pos);
         virtual ~Piece();
         bool hasMoved();
-        void setMoved(bool moved);
+        void incrementTimesMoved();
+        void decrementTimesMoved();
 };
 
 #endif

@@ -332,9 +332,12 @@ void Game::startGame() {
                     Player * opp = players[!turn];
                     if(board->isInCheck(opp->getColor())){
                         opp->setInCheck(true);
+                        if (turn == 0) cout << "White "; // black put white in check
+                        else cout << "Black ";
+                        cout << "is in check." << endl;
                     }
                     if(opp->isCheckmate()){
-                        cout << "CHECKMATE - ";
+                        cout << "Checkmate! ";
                         if(opp->getColor() == 1) {
                             
                             pbScore++;
@@ -345,13 +348,13 @@ void Game::startGame() {
                         printWinner(cur->getColor());
                         reset();
                     } else if(opp->isStalemate()){
-                        cout << "STALEMATE - ";
+                        cout << "Stalemate! ";
                         printDraw();
                         pbScore += 0.5;
                         pwScore += 0.5;
                         reset();
                     } else if(board->isInsufficientMaterial()){
-                        cout << "INSUFFICIENT MATERIAL - " << endl;
+                        cout << "Insufficient Material! " << endl;
                         printDraw();
                         pbScore += 0.5;
                         pwScore += 0.5;
@@ -394,6 +397,16 @@ void Game::startGame() {
 
             } catch (std::invalid_argument& err) {
                 cerr << err.what() << endl;
+            }
+
+        } else if (input == "undo") {
+            try {
+                board->undo();
+                turn = !turn;
+                board->notifyObservers(); 
+            }
+            catch (out_of_range& err) {
+                cout << err.what() << endl;
             }
 
         } else if (input == "resign") {
