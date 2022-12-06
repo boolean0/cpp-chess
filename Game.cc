@@ -315,7 +315,7 @@ void Game::startGame() {
                         else pwScore++;
                         reset();
                     } 
-                    if(opp->isStalemate()){
+                    else if(opp->isStalemate()){
                         cout << "STALEMATE!" << endl;
                         reset();
                     }
