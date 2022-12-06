@@ -14,6 +14,7 @@ class ChessBoard : public Subject {
         void afterMove(Move move); 
         bool checkLegalCastle(Move move, bool isKSCastle);
         Move castlingKingMoveFactory(Move kingMove, pair<int, int> ending, bool isKSCastle);
+        vector<Move> prevMoves;
     public:
         ~ChessBoard();
         void init(); 
@@ -34,6 +35,7 @@ class ChessBoard : public Subject {
         int scoredSimulateMove(Move move);
         void simulateFutureMove(Move move);
         void resetFutureMove(Move move);
+        void undo();
 };
 
 #endif

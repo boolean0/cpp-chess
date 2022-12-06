@@ -5,7 +5,7 @@
 using namespace std; 
 
 Piece::Piece(bool white, int points, pair<int, int> position, char pieceSymbol) 
-: white{white}, points{points}, position{position}, pieceSymbol{pieceSymbol}, moved{false} {}
+: white{white}, points{points}, position{position}, pieceSymbol{pieceSymbol}, timesMoved{0} {}
 
 bool Piece::isWhite(){
     return white;
@@ -28,8 +28,14 @@ void Piece::setPosition(pair<int, int> pos){
     position = pos;
 }
 
-bool Piece::hasMoved() { return moved; }
+bool Piece::hasMoved() { return timesMoved != 0; }
 
-void Piece::setMoved(bool moved) { this->moved = moved; }
+
+void Piece::incrementTimesMoved() { ++timesMoved; }
+void Piece::decrementTimesMoved() { 
+    if (timesMoved > 0) {
+        --timesMoved; 
+    }
+}
 
 Piece::~Piece() {}

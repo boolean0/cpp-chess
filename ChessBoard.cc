@@ -153,6 +153,7 @@ void ChessBoard::trySetPiece(Move move) {
     board[rowEnd][colEnd] = move.getMovedPiece();
     board[rowStart][colStart] = nullptr; 
     move.getMovedPiece()->setPosition(move.getEndPos());
+    move.getMovedPiece()->incrementTimesMoved();
 
 }
 
@@ -161,9 +162,14 @@ void ChessBoard::resetMove(Move move) {
     int colEnd = move.getEndPos().second;
     int rowStart = move.getStartPos().first; 
     int colStart = move.getStartPos().second;
+    
+    Piece *p = move.getMovedPiece();
+
     board[rowEnd][colEnd] = move.getCapturedPiece();
-    board[rowStart][colStart] = move.getMovedPiece();
-    move.getMovedPiece()->setPosition(move.getStartPos());
+    board[rowStart][colStart] = p;
+    p->setPosition(move.getStartPos());
+    p->decrementTimesMoved();
+
 }
 
 bool ChessBoard::simulateMove(Move move) { 
@@ -194,8 +200,8 @@ bool ChessBoard::simulateMove(Move move) {
 void ChessBoard::afterMove(Move move) {
     cout << "After move: " << endl;
     Piece * p = move.getMovedPiece();
-    p->setMoved(true);
-
+    p->incrementTimesMoved();
+    prevMoves.emplace_back(move);
     //if pawn was captured, and it was enpassant, remove it from the board
     if(move.getIsEP()){
             pair<int, int> capturedPawnPos = move.getCapturedPiece()->getPosition();
@@ -244,7 +250,7 @@ void ChessBoard::afterMove(Move move) {
                 continue;
             }
         }
-        delete p;
+        //delete p; 
     }
 }
 
@@ -354,6 +360,20 @@ bool ChessBoard::checkInDanger(Piece * piece) { // for AI
         }
     }
     return false;
+}
+
+void ChessBoard::undo() {
+    if (prevMoves.size() == 0) {
+        throw out_of_range("No more moves to undo!");
+    }
+    else {        
+        resetMove(prevMoves.back());
+        prevMoves.pop_back();
+        if (prevMoves.back().isPotentialQSCastle() || prevMoves.back().isPotentialKSCastle()) {
+            resetMove(prevMoves.back());
+            prevMoves.pop_back();
+        }
+    }
 }
 
 bool ChessBoard::isMovingOutOfDanger(Move move) {
