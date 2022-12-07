@@ -198,7 +198,6 @@ bool ChessBoard::simulateMove(Move move) {
 }
 
 void ChessBoard::afterMove(Move move) {
-    cout << "After move: " << endl;
     Piece * p = move.getMovedPiece();
     p->incrementTimesMoved();
     prevMoves.emplace_back(move);
@@ -206,7 +205,6 @@ void ChessBoard::afterMove(Move move) {
     if(move.getIsEP()){
             pair<int, int> capturedPawnPos = move.getCapturedPiece()->getPosition();
             setPiece(capturedPawnPos, nullptr); //this leaks memory but works
-            //delete board[capturedPawnPos.first][capturedPawnPos.second]; //this crashes the program
     }
     //set all pawns enpassant value to false
     for(int i = 0; i < 8; i++){
@@ -291,10 +289,6 @@ void ChessBoard::doMove(Move move) {
     // ONLY CALL AFTER ALL CHECKS ON MOVES HAVE BEEN DONE!
     if (move.getMovedPiece() == nullptr ) cout << "null " << endl;
     setPiece(move.getEndPos(), move.getMovedPiece());
-    cout << "Moved " << move.getMovedPiece()->getPieceSymbol() << " from (" <<
-                move.getStartPos().first << ", " << move.getStartPos().second
-                << ") to (" << move.getEndPos().first 
-                << "," << move.getEndPos().second << ")" << endl;
     setPiece(move.getStartPos(), nullptr);
     move.getMovedPiece()->setPosition(move.getEndPos());
     afterMove(move);
@@ -367,7 +361,6 @@ void ChessBoard::undo() {
         throw out_of_range("No more moves to undo!");
     }
     else {        
-        cout << "1" << endl;
         resetMove(prevMoves.back());
         prevMoves.pop_back();
         if (prevMoves.size() == 0) return;
