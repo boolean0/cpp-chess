@@ -41,4 +41,3 @@ vector<Move> King::generateMoves(){
     } 
     return moveList;
 }
-

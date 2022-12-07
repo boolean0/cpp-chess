@@ -597,5 +597,3 @@ void ChessBoard::simulateFutureMove(Move move) {
 void ChessBoard::resetFutureMove(Move move) {
     resetMove(move);
 }
-
-
