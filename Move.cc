@@ -24,16 +24,6 @@ Move::Move(Piece* movedPiece, pair<int, int> startPos, pair<int, int> endPos, Pi
     isEP{isEP} {}
 
 
-//REMOVE ME IM USELESS
-Move::Move() : 
-    movedPiece{nullptr}, 
-    endPos{make_pair(0,0)}, 
-    capturedPiece{nullptr},
-    isCastleK{false},
-    isCastleQ{false},
-    isPromoting{false},
-    isEP{false}{}
-
 Piece* Move::getMovedPiece(){
     return movedPiece;
 }

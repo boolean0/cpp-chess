@@ -367,8 +367,10 @@ void ChessBoard::undo() {
         throw out_of_range("No more moves to undo!");
     }
     else {        
+        cout << "1" << endl;
         resetMove(prevMoves.back());
         prevMoves.pop_back();
+        if (prevMoves.size() == 0) return;
         if (prevMoves.back().isPotentialQSCastle() || prevMoves.back().isPotentialKSCastle()) {
             resetMove(prevMoves.back());
             prevMoves.pop_back();
